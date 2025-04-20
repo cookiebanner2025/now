@@ -11,7 +11,7 @@
 // ============== CONFIGURATION SECTION ============== //
 const config = {
     // Domain restriction - only show on these domains (empty array = all domains)
-    allowedDomains: ['dev-rpractice.pantheonsite.io', 'yourdomain.com'],
+    allowedDomains: ['dev-rpractice.pantheonsite.io', 'practicebdhere.myshopify.com'],
     
     // Banner display settings
     bannerSettings: {
