@@ -15,7 +15,7 @@ const config = {
     
     // Banner display settings
     bannerSettings: {
-        position: 'right', // 'left', 'right', or 'center'
+        position: 'left', // 'left', 'right', or 'center'
         width: 440, // Default width in pixels
         height: 'auto', // 'auto' or specific height in pixels
         delay: 0, // Delay in seconds before showing banner (0 for immediate)
