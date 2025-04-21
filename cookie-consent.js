@@ -25,22 +25,22 @@ const config = {
     
     // Geo-targeting configuration
     geoConfig: {
-        // Only show in these countries (empty array = all countries)
+        // Only show in these countries (empty array = all countries) ['US', 'CA']
         allowedCountries: [],
         
-        // Only show in these regions/states (empty array = all regions)
+        // Only show in these regions/states (empty array = all regions)['California', 'New York']
         allowedRegions: [],
         
-        // Only show in these cities (empty array = all cities)
+        // Only show in these cities (empty array = all cities)['Los Angeles', 'San Francisco']
         allowedCities: [],
         
-        // Countries where banner should be hidden
-        blockedCountries: [],
+        // Countries where banner should be hidden ['US', 'CA']
+        blockedCountries: [], 
         
-        // Regions where banner should be hidden
+        // Regions where banner should be hidden ['California', 'New York']
         blockedRegions: [],
         
-        // Cities where banner should be hidden
+        // Cities where banner should be hidden ['Los Angeles', 'San Francisco']
         blockedCities: []
     },
     
@@ -58,8 +58,8 @@ const config = {
 // Banner behavior
 behavior: {
     autoShow: true, // Automatically show banner on page load
-    bannerDelay: 10, // Seconds before showing banner (0, 5, 10, or any number)
-    floatingButton: false, // Show floating settings button
+    bannerDelay: 0, // Seconds before showing banner (0, 5, 10, or any number)
+    floatingButton: true, // Show floating settings button
     rememberLanguage: true, // Remember user's language preference
     acceptOnScroll: false, // Accept cookies when user scrolls
     acceptOnContinue: true, // Implicit consent when continuing to browse
