@@ -1,5 +1,5 @@
 /**
- * Ultimate GDPR Cookie Consent Solution v4.2 - Advanced Edition
+ * Ultimate GDPR Cookie Consent Solution v4.1 - Advanced Edition
  * - Automatic translation based on user's country
  * - Domain restriction controls
  * - Geo-targeting (country/city/state level controls)
@@ -7,112 +7,84 @@
  * - Built-in analytics dashboard with password protection
  * - Consent Mode v2 and future-proof compliance
  * - Premium UI with enhanced UX
- * - Enhanced controls for banner, buttons, colors, and floating icons
- * - Detailed consent history tracking
- * - Analytics graphs
- * - Banner delay functionality
  */
 
 // ============== CONFIGURATION SECTION ============== //
 const config = {
-    // Domain restriction
+    // Domain restriction - only show on these domains (empty array = all domains)
     allowedDomains: ['dev-rpractice.pantheonsite.io', 'yourdomain.com'],
-    
+     bannerPosition: 'right', // 'left' or 'right'
+    bannerDelay: 0, // seconds before showing banner
     // Language configuration
     languageConfig: {
-        defaultLanguage: 'en',
-        availableLanguages: ['en', 'fr', 'de'], // Limited to 3 languages
-        showLanguageSelector: true,
-        autoDetectLanguage: true
+        defaultLanguage: 'en', // Default language if auto-detection fails
+        availableLanguages: [], // Empty array = all languages available
+        showLanguageSelector: true, // Show/hide language dropdown
+        autoDetectLanguage: true // Auto-detect language based on country/browser
     },
     
     // Geo-targeting configuration
     geoConfig: {
+        // Only show in these countries (empty array = all countries)
         allowedCountries: [],
+        
+        // Only show in these regions/states (empty array = all regions)
         allowedRegions: [],
+        
+        // Only show in these cities (empty array = all cities)
         allowedCities: [],
+        
+        // Countries where banner should be hidden
         blockedCountries: [],
+        
+        // Regions where banner should be hidden
         blockedRegions: [],
+        
+        // Cities where banner should be hidden
         blockedCities: []
     },
     
     // Analytics configuration
+    // Enhanced analytics controls
     analytics: {
         enabled: true,
         storageDays: 30,
         showDashboard: true,
         passwordProtect: true,
         dashboardPassword: 'admin123',
-        passwordCookieDuration: -1 // -1 for non-expiring password
+        passwordCookieDuration: 365, // set to 0 for no expiration
+        floatingIconPosition: 'left' // position for analytics icon
     },
-    
+     // New UI control options
+    uiControls: {
+        banner: true,
+        buttons: true,
+        floatingButton: true,
+        floatingButtonPosition: 'right',
+        colors: colorScheme, // reference to color scheme
+        // ... other UI controls ...
+    }
     // Banner behavior
     behavior: {
-        autoShow: true,
-        bannerDelay: 5000, // 5 seconds delay by default (in milliseconds)
-        floatingButton: true,
-        floatingButtonEnabled: true,
-        analyticsFloatingButtonEnabled: true,
-        rememberLanguage: true,
-        acceptOnScroll: false,
-        acceptOnContinue: true,
-        floatingButtonPosition: 'left',
-        bannerPosition: 'left' // New banner position control
+        autoShow: true, // Automatically show banner on page load
+        floatingButton: true, // Show floating settings button
+        rememberLanguage: true, // Remember user's language preference
+        acceptOnScroll: false, // Accept cookies when user scrolls
+        acceptOnContinue: true, // Implicit consent when continuing to browse
+        floatingButtonPosition: 'left' // 'left' or 'right'
     },
-    
-    // UI Customization
-    uiCustomization: {
-        banner: {
-            enabled: true,
-            width: '440px',
-            borderRadius: '12px',
-            padding: '24px'
-        },
-        buttons: {
-            accept: {
-                backgroundColor: '#2ecc71',
-                textColor: '#ffffff',
-                borderColor: '#2ecc71'
-            },
-            reject: {
-                backgroundColor: '#ffffff',
-                textColor: '#e74c3c',
-                borderColor: '#e74c3c'
-            },
-            adjust: {
-                backgroundColor: '#f8f9fa',
-                textColor: '#333333',
-                borderColor: '#e0e0e0'
-            },
-            save: {
-                backgroundColor: '#3498db',
-                textColor: '#ffffff',
-                borderColor: '#3498db'
-            }
-        },
-        floatingIcons: {
-            consent: {
-                backgroundColor: '#2ecc71',
-                size: '60px',
-                iconColor: '#ffffff'
-            },
-            analytics: {
-                backgroundColor: '#3498db',
-                size: '60px',
-                iconColor: '#ffffff'
-            }
-        }
-    },
-    
-    // UI Theme
+
+
+    // UI Theme (can be 'default' or 'classic')
     uiTheme: 'default'
 };
 
 // ============== MAIN IMPLEMENTATION ============== //
+// Initialize dataLayer for Google Tag Manager
 window.dataLayer = window.dataLayer || [];
 function gtag() { dataLayer.push(arguments); }
 
-// Set default consent
+// Set default consent (deny all except security)
 gtag('consent', 'default', {
     'ad_storage': 'denied',
     'analytics_storage': 'denied',
@@ -123,52 +95,89 @@ gtag('consent', 'default', {
     'security_storage': 'granted'
 });
 
-// Color scheme
+// Color scheme - easily customizable
 const colorScheme = {
-    primary: config.uiCustomization.buttons.accept.backgroundColor,
-    secondary: config.uiCustomization.buttons.save.backgroundColor,
-    danger: config.uiCustomization.buttons.reject.textColor,
-    textDark: '#2c3e50',
-    textLight: '#7f8c8d',
-    background: '#ffffff',
-    toggleActive: config.uiCustomization.buttons.accept.backgroundColor,
-    toggleInactive: '#bdc3c7'
+    primary: '#2ecc71',      // Green (accept button color)
+    secondary: '#3498db',    // Blue (save button color)
+    danger: '#e74c3c',       // Red (reject button color)
+    textDark: '#2c3e50',     // Dark text
+    textLight: '#7f8c8d',    // Light text
+    background: '#ffffff',   // White background
+    toggleActive: '#2ecc71', // Same as primary
+    toggleInactive: '#bdc3c7'// Gray for inactive
 };
 
+// Classic theme color scheme
 const classicColorScheme = {
-    primary: '#4CAF50',
-    secondary: '#2196F3',
-    danger: '#f44336',
-    textDark: '#212121',
-    textLight: '#757575',
-    background: '#ffffff',
-    toggleActive: '#4CAF50',
-    toggleInactive: '#9E9E9E'
+    primary: '#4CAF50',      // Green (accept button color)
+    secondary: '#2196F3',    // Blue (save button color)
+    danger: '#f44336',       // Red (reject button color)
+    textDark: '#212121',     // Dark text
+    textLight: '#757575',    // Light text
+    background: '#ffffff',   // White background
+    toggleActive: '#4CAF50', // Same as primary
+    toggleInactive: '#9E9E9E'// Gray for inactive
 };
 
-// Cookie database
+// Enhanced cookie database with detailed descriptions
 const cookieDatabase = {
+    // Google Analytics/GA4
     '_ga': { category: 'analytics', duration: '2 years', description: 'Google Analytics user distinction' },
     '_gid': { category: 'analytics', duration: '24 hours', description: 'Google Analytics user distinction' },
     '_gat': { category: 'analytics', duration: '1 minute', description: 'Google Analytics throttle rate' },
     '_ga_': { category: 'analytics', duration: '2 years', description: 'GA4 session state' },
+    
+    // Facebook Pixel
     '_fbp': { category: 'advertising', duration: '3 months', description: 'Facebook conversion tracking' },
     'fr': { category: 'advertising', duration: '3 months', description: 'Facebook targeted ads' },
+    
+    // Functional cookies
     'wordpress_': { category: 'functional', duration: 'Session', description: 'WordPress authentication' },
     'wp-settings': { category: 'functional', duration: '1 year', description: 'WordPress preferences' },
     'PHPSESSID': { category: 'functional', duration: 'Session', description: 'PHP session' },
     'cookie_consent': { category: 'functional', duration: '1 year', description: 'Stores cookie consent preferences' },
+    
+    // WooCommerce cookies
     'woocommerce_items_in_cart': { category: 'functional', duration: 'Session', description: 'WooCommerce cart items tracking' },
     'woocommerce_cart_hash': { category: 'functional', duration: 'Session', description: 'WooCommerce cart hash' },
+    
+    // Advertising cookies
     '_gcl_au': { category: 'advertising', duration: '3 months', description: 'Google Ads conversion' },
     'IDE': { category: 'advertising', duration: '1 year', description: 'Google DoubleClick' },
     'NID': { category: 'advertising', duration: '6 months', description: 'Google user tracking' },
+    
+    // Other common cookies
     'gclid_tracker': { category: 'advertising', duration: 'Session', description: 'Tracks Google Click ID for conversions' },
     'tk_ai': { category: 'analytics', duration: 'Session', description: 'Jetpack/Tumblr analytics' },
     'external_id': { category: 'functional', duration: 'Session', description: 'External service identifier' }
 };
+// New functions for analytics dashboard
+function generateAnalyticsDashboard() {
+    // ... detailed chart generation code ...
+}
+// Enhanced geo-targeting examples in config
+geoConfig: {
+    // Example: Only show in specific cities
+    allowedCities: ['New York', 'London', 'Paris'],
+    
+    // Example: Block specific regions
+    blockedRegions: ['California', 'Texas'],
+    
+    // ... other geo controls ...
+}
 
-// Language translations
+// New delay implementation
+function showCookieBanner() {
+    if (config.bannerDelay > 0) {
+        setTimeout(() => {
+            // Actual show logic
+        }, config.bannerDelay * 1000);
+    } else {
+        // Immediate show
+    }
+}
+
+// Complete EU language translations (same as before, but I'll include it for completeness)
 const translations = {
     en: {
         title: "We value your privacy",
@@ -200,8 +209,7 @@ const translations = {
         passwordPrompt: "Enter password to view analytics",
         passwordSubmit: "Submit",
         passwordIncorrect: "Incorrect password",
-        dashboardTitle: "Consent Analytics Dashboard",
-        historyTitle: "Consent Change History"
+        dashboardTitle: "Consent Analytics Dashboard"
     },
     fr: {
         title: "Nous respectons votre vie privée",
@@ -233,10 +241,9 @@ const translations = {
         passwordPrompt: "Entrez le mot de passe pour voir les analyses",
         passwordSubmit: "Soumettre",
         passwordIncorrect: "Mot de passe incorrect",
-        dashboardTitle: "Tableau de bord des analyses de consentement",
-        historyTitle: "Historique des changements de consentement"
+        dashboardTitle: "Tableau de bord des analyses de consentement"
     },
-    de: {
+      de: {
         title: "Wir schätzen Ihre Privatsphäre",
         description: "Wir verwenden Cookies, um Ihr Surferlebnis zu verbessern, personalisierte Anzeigen oder Inhalte bereitzustellen und unseren Datenverkehr zu analysieren. Wenn Sie auf \"Alle akzeptieren\" klicken, erklären Sie sich mit der Verwendung von Cookies einverstanden.",
         privacy: "Datenschutzrichtlinie",
@@ -262,50 +269,669 @@ const translations = {
         statsTotal: "Gesamt",
         statsPercentage: "Prozentsatz",
         statsLast7Days: "Letzten 7 Tage",
-        statsLast30Days: "Letzten 30 Tage",
-        passwordPrompt: "Passwort eingeben, um Analysen anzuzeigen",
-        passwordSubmit: "Einreichen",
-        passwordIncorrect: "Falsches Passwort",
-        dashboardTitle: "Dashboard für Zustimmungsanalysen",
-        historyTitle: "Verlauf der Zustimmungsänderungen"
-    }
-    // Other language mappings preserved but not included in availableLanguages
+        statsLast30Days: "Letzten 30 Tage"
+    },
+    es: {
+        title: "Valoramos su privacidad",
+        description: "Utilizamos cookies para mejorar su experiencia, proporcionar anuncios o contenido personalizado y analizar nuestro tráfico. Al hacer clic en \"Aceptar todo\", usted acepta el uso de cookies.",
+        privacy: "Política de privacidad",
+        customize: "Personalizar",
+        reject: "Rechazar todo",
+        accept: "Aceptar todo",
+        essential: "Cookies esenciales",
+        essentialDesc: "Necesarias para el funcionamiento",
+        analytics: "Cookies de análisis",
+        analyticsDesc: "Ayudan a entender interacciones",
+        performance: "Cookies de rendimiento",
+        performanceDesc: "Mejoran el rendimiento",
+        advertising: "Cookies publicitarias",
+        advertisingDesc: "Muestran anuncios relevantes",
+        other: "Otras cookies",
+        otherDesc: "Cookies no categorizadas",
+        save: "Guardar preferencias",
+        language: "Español",
+        statsTitle: "Estadísticas de Consentimiento",
+        statsAccepted: "Aceptado",
+        statsRejected: "Rechazado",
+        statsCustom: "Personalizado",
+        statsTotal: "Total",
+        statsPercentage: "Porcentaje",
+        statsLast7Days: "Últimos 7 Días",
+        statsLast30Days: "Últimos 30 Días"
+    },
+    it: {
+        title: "Rispettiamo la tua privacy",
+        description: "Utilizziamo i cookie per migliorare la tua esperienza, fornire annunci o contenuti personalizzati e analizzare il nostro traffico. Cliccando su \"Accetta tutto\", acconsenti all'uso dei cookie.",
+        privacy: "Privacy Policy",
+        customize: "Personalizza",
+        reject: "Rifiuta tutto",
+        accept: "Accetta tutto",
+        essential: "Cookie essenziali",
+        essentialDesc: "Necessari per il funzionamento",
+        analytics: "Cookie analitici",
+        analyticsDesc: "Analizzano le interazioni",
+        performance: "Cookie prestazioni",
+        performanceDesc: "Migliorano le prestazioni",
+        advertising: "Cookie pubblicitari",
+        advertisingDesc: "Mostrano annunci pertinenti",
+        other: "Altri cookie",
+        otherDesc: "Cookie non categorizzati",
+        save: "Salva preferenze",
+        language: "Italiano",
+        statsTitle: "Statistiche del Consenso",
+        statsAccepted: "Accettato",
+        statsRejected: "Rifiutato",
+        statsCustom: "Personalizzato",
+        statsTotal: "Totale",
+        statsPercentage: "Percentuale",
+        statsLast7Days: "Ultimi 7 Giorni",
+        statsLast30Days: "Ultimi 30 Giorni"
+    },
+    pt: {
+        title: "Valorizamos sua privacidade",
+        description: "Usamos cookies para melhorar sua experiência, fornecer anúncios ou conteúdo personalizado e analisar nosso tráfego. Clicando em \"Aceitar Tudo\", você concorda com o uso de cookies.",
+        privacy: "Política de Privacidade",
+        customize: "Personalizar",
+        reject: "Rejeitar Tudo",
+        accept: "Aceitar Tudo",
+        essential: "Cookies Essenciais",
+        essentialDesc: "Necessários para o funcionamento",
+        analytics: "Cookies de Análise",
+        analyticsDesc: "Ajudam a entender interações",
+        performance: "Cookies de Desempenho",
+        performanceDesc: "Melhoram o desempenho",
+        advertising: "Cookies de Publicidade",
+        advertisingDesc: "Exibem anúncios relevantes",
+        other: "Outros Cookies",
+        otherDesc: "Cookies não categorizados",
+        save: "Salvar Preferências",
+        language: "Português",
+        statsTitle: "Estatísticas de Consentimento",
+        statsAccepted: "Aceito",
+        statsRejected: "Rejeitado",
+        statsCustom: "Personalizado",
+        statsTotal: "Total",
+        statsPercentage: "Percentagem",
+        statsLast7Days: "Últimos 7 Dias",
+        statsLast30Days: "Últimos 30 Dias"
+    },
+    nl: {
+        title: "We waarderen uw privacy",
+        description: "We gebruiken cookies om uw browse-ervaring te verbeteren, gepersonaliseerde advertenties of inhoud te bieden en ons verkeer te analyseren. Door op \"Alles accepteren\" te klikken, stemt u in met het gebruik van cookies.",
+        privacy: "Privacybeleid",
+        customize: "Aanpassen",
+        reject: "Alles weigeren",
+        accept: "Alles accepteren",
+        essential: "Essentiële Cookies",
+        essentialDesc: "Noodzakelijk voor websitefunctionaliteit",
+        analytics: "Analysecookies",
+        analyticsDesc: "Helpen bezoekersinteracties te begrijpen",
+        performance: "Prestatiecookies",
+        performanceDesc: "Verbeteren website prestaties",
+        advertising: "Advertentiecookies",
+        advertisingDesc: "Leveren relevante advertenties",
+        other: "Andere Cookies",
+        otherDesc: "Niet-gecategoriseerde cookies",
+        save: "Voorkeuren opslaan",
+        language: "Nederlands",
+        statsTitle: "Toestemmingsstatistieken",
+        statsAccepted: "Geaccepteerd",
+        statsRejected: "Geweigerd",
+        statsCustom: "Aangepast",
+        statsTotal: "Totaal",
+        statsPercentage: "Percentage",
+        statsLast7Days: "Laatste 7 Dagen",
+        statsLast30Days: "Laatste 30 Dagen"
+    },
+    pl: {
+        title: "Szanujemy Twoją prywatność",
+        description: "Używamy plików cookie, aby poprawić Twoje doświadczenia przeglądania, dostarczać spersonalizowane reklamy lub treści i analizować nasz ruch. Klikając „Zaakceptuj wszystkie”, wyrażasz zgodę na używanie plików cookie.",
+        privacy: "Polityka prywatności",
+        customize: "Dostosuj",
+        reject: "Odrzuć wszystkie",
+        accept: "Zaakceptuj wszystkie",
+        essential: "Niezbędne pliki cookie",
+        essentialDesc: "Wymagane do działania witryny",
+        analytics: "Analityczne pliki cookie",
+        analyticsDesc: "Pomagają zrozumieć interakcje",
+        performance: "Pliki cookie wydajności",
+        performanceDesc: "Poprawiają wydajność witryny",
+        advertising: "Reklamowe pliki cookie",
+        advertisingDesc: "Dostarczają odpowiednie reklamy",
+        other: "Inne pliki cookie",
+        otherDesc: "Nieskategoryzowane pliki cookie",
+        save: "Zapisz preferencje",
+        language: "Polski",
+        statsTitle: "Statystyki zgód",
+        statsAccepted: "Zaakceptowane",
+        statsRejected: "Odrzucone",
+        statsCustom: "Dostosowane",
+        statsTotal: "Łącznie",
+        statsPercentage: "Procent",
+        statsLast7Days: "Ostatnie 7 Dni",
+        statsLast30Days: "Ostatnie 30 Dni"
+    },
+    sv: {
+        title: "Vi värdesätter din integritet",
+        description: "Vi använder cookies för att förbättra din surfupplevelse, tillhandahålla anpassade annonser eller innehåll och analysera vår trafik. Genom att klicka på \"Acceptera alla\" samtycker du till användningen av cookies.",
+        privacy: "Integritetspolicy",
+        customize: "Anpassa",
+        reject: "Avvisa alla",
+        accept: "Acceptera alla",
+        essential: "Nödvändiga Cookies",
+        essentialDesc: "Nödvändiga för webbplatsens funktionalitet",
+        analytics: "Analyscookies",
+        analyticsDesc: "Hjälper till att förstå besökarinteraktioner",
+        performance: "Prestandacookies",
+        performanceDesc: "Förbättrar webbplatsens prestanda",
+        advertising: "Annonscookies",
+        advertisingDesc: "Levererar relevanta annonser",
+        other: "Andra Cookies",
+        otherDesc: "Okategoriserade cookies",
+        save: "Spara inställningar",
+        language: "Svenska",
+        statsTitle: "Samtyckesstatistik",
+        statsAccepted: "Accepterade",
+        statsRejected: "Avvisade",
+        statsCustom: "Anpassade",
+        statsTotal: "Totalt",
+        statsPercentage: "Procent",
+        statsLast7Days: "Senaste 7 Dagarna",
+        statsLast30Days: "Senaste 30 Dagarna"
+    },
+    da: {
+        title: "Vi værdsætter dit privatliv",
+        description: "Vi bruger cookies til at forbedre din browsingoplevelse, levere personificerede annoncer eller indhold og analysere vores trafik. Ved at klikke på \"Accepter alle\" giver du samtykke til brugen af cookies.",
+        privacy: "Privatlivspolitik",
+        customize: "Tilpas",
+        reject: "Afvis alle",
+        accept: "Accepter alle",
+        essential: "Nødvendige Cookies",
+        essentialDesc: "Nødvendige for webstedets funktionalitet",
+        analytics: "Analysecookies",
+        analyticsDesc: "Hjælper med at forstå brugerinteraktioner",
+        performance: "Performancecookies",
+        performanceDesc: "Forbedrer webstedets ydeevne",
+        advertising: "Annoncecookies",
+        advertisingDesc: "Leverer relevante annoncer",
+        other: "Andre Cookies",
+        otherDesc: "Ukategoriserede cookies",
+        save: "Gem indstillinger",
+        language: "Dansk",
+        statsTitle: "Samtykkestatistik",
+        statsAccepted: "Accepteret",
+        statsRejected: "Afvist",
+        statsCustom: "Tilpasset",
+        statsTotal: "Total",
+        statsPercentage: "Procentdel",
+        statsLast7Days: "Sidste 7 Dage",
+        statsLast30Days: "Sidste 30 Dage"
+    },
+    fi: {
+        title: "Arvostamme yksityisyyttäsi",
+        description: "Käytämme evästeitä parantaaksemme selauskokemustasi, tarjotaksemme henkilökohtaisia mainoksia tai sisältöä ja analysoidaksemme liikennettämme. Klikkaamalla \"Hyväksy kaikki\" annat suostumuksesi evästeiden käyttöön.",
+        privacy: "Tietosuojakäytäntö",
+        customize: "Mukauta",
+        reject: "Hylkää kaikki",
+        accept: "Hyväksy kaikki",
+        essential: "Välttämättömät evästeet",
+        essentialDesc: "Välttämättömiä sivuston toiminnan kannalta",
+        analytics: "Analytiikkaevästeet",
+        analyticsDesc: "Auttavat ymmärtämään käyttäjäinteraktioita",
+        performance: "Suorituskykyevästeet",
+        performanceDesc: "Parantavat sivuston suorituskykyä",
+        advertising: "Mainosevästeet",
+        advertisingDesc: "Toimittavat asiaankuuluvia mainoksia",
+        other: "Muut evästeet",
+        otherDesc: "Luokittelemattomat evästeet",
+        save: "Tallenna asetukset",
+        language: "Suomi",
+        statsTitle: "Suostumustilastot",
+        statsAccepted: "Hyväksytty",
+        statsRejected: "Hylätty",
+        statsCustom: "Mukautettu",
+        statsTotal: "Yhteensä",
+        statsPercentage: "Prosenttia",
+        statsLast7Days: "Viimeiset 7 Päivää",
+        statsLast30Days: "Viimeiset 30 Päivää"
+    },
+    el: {
+        title: "Σεβόμαστε την ιδιωτικότητά σας",
+        description: "Χρησιμοποιούμε cookies για να βελτιώσουμε την εμπειρία σας, να παρέχουμε εξατομικευμένες διαφημίσεις ή περιεχόμενο και να αναλύουμε την επισκεψιμότητά μας. Κάνοντας κλικ στο \"Αποδοχή όλων\", συναινείτε στη χρήση cookies.",
+        privacy: "Πολιτική Απορρήτου",
+        customize: "Προσαρμογή",
+        reject: "Απόρριψη όλων",
+        accept: "Αποδοχή όλων",
+        essential: "Απαραίτητα Cookies",
+        essentialDesc: "Απαραίτητα για τη λειτουργία του ιστότοπου",
+        analytics: "Αναλυτικά Cookies",
+        analyticsDesc: "Βοηθούν στην κατανόηση αλληλεπιδράσεων",
+        performance: "Cookies Απόδοσης",
+        performanceDesc: "Βελτιώνουν την απόδοση του ιστότοπου",
+        advertising: "Διαφημιστικά Cookies",
+        advertisingDesc: "Παρέχουν σχετικές διαφημίσεις",
+        other: "Άλλα Cookies",
+        otherDesc: "Μη κατηγοριοποιημένα cookies",
+        save: "Αποθήκευση προτιμήσεων",
+        language: "Ελληνικά",
+        statsTitle: "Στατιστικά Συναίνεσης",
+        statsAccepted: "Αποδεκτά",
+        statsRejected: "Απορριφθέντα",
+        statsCustom: "Προσαρμοσμένα",
+        statsTotal: "Σύνολο",
+        statsPercentage: "Ποσοστό",
+        statsLast7Days: "Τελευταίες 7 Ημέρες",
+        statsLast30Days: "Τελευταίες 30 Ημέρες"
+    },
+    hu: {
+        title: "Tiszteljük az Ön privát szféráját",
+        description: "Cookie-kat használunk a böngészési élmény javításához, személyre szabott hirdetések vagy tartalom nyújtásához és a forgalmunk elemzéséhez. Az \"Összes elfogadása\" gombra kattintva hozzájárul a cookie-k használatához.",
+        privacy: "Adatvédelmi irányelv",
+        customize: "Testreszabás",
+        reject: "Összes elutasítása",
+        accept: "Összes elfogadása",
+        essential: "Alapvető Cookie-k",
+        essentialDesc: "A weboldal működéséhez szükséges",
+        analytics: "Elemző Cookie-k",
+        analyticsDesc: "Segítenek megérteni a látogatói interakciókat",
+        performance: "Teljesítmény Cookie-k",
+        performanceDesc: "Javítják a weboldal teljesítményét",
+        advertising: "Hirdetési Cookie-k",
+        advertisingDesc: "Releváns hirdetéseket jelenítenek meg",
+        other: "Egyéb Cookie-k",
+        otherDesc: "Nincs kategorizálva",
+        save: "Beállítások mentése",
+        language: "Magyar",
+        statsTitle: "Hozzájárulási statisztikák",
+        statsAccepted: "Elfogadva",
+        statsRejected: "Elutasítva",
+        statsCustom: "Testreszabva",
+        statsTotal: "Összesen",
+        statsPercentage: "Százalék",
+        statsLast7Days: "Elmúlt 7 Nap",
+        statsLast30Days: "Elmúlt 30 Nap"
+    },
+    cs: {
+        title: "Vaše soukromí je pro nás důležité",
+        description: "Používáme cookies ke zlepšení vašeho zážitku z prohlížení, poskytování personalizovaných reklam nebo obsahu a analýze našeho provozu. Kliknutím na \"Přijmout vše\" souhlasíte s používáním cookies.",
+        privacy: "Zásady ochrany osobních údajů",
+        customize: "Přizpůsobit",
+        reject: "Odmítnout vše",
+        accept: "Přijmout vše",
+        essential: "Nezbytné Cookies",
+        essentialDesc: "Nezbytné pro funkčnost webu",
+        analytics: "Analytické Cookies",
+        analyticsDesc: "Pomáhají porozumět interakcím návštěvníků",
+        performance: "Výkonnostní Cookies",
+        performanceDesc: "Zlepšují výkon webu",
+        advertising: "Reklamní Cookies",
+        advertisingDesc: "Poskytují relevantní reklamy",
+        other: "Ostatní Cookies",
+        otherDesc: "Nekategorizované cookies",
+        save: "Uložit nastavení",
+        language: "Čeština",
+        statsTitle: "Statistiky souhlasu",
+        statsAccepted: "Přijato",
+        statsRejected: "Odmítnuto",
+        statsCustom: "Přizpůsobeno",
+        statsTotal: "Celkem",
+        statsPercentage: "Procento",
+        statsLast7Days: "Posledních 7 Dní",
+        statsLast30Days: "Posledních 30 Dní"
+    },
+    ro: {
+        title: "Respectăm confidențialitatea dumneavoastră",
+        description: "Folosim cookie-uri pentru a îmbunătăți experiența de navigare, pentru a furniza reclame sau conținut personalizat și pentru a analiza traficul nostru. Făcând clic pe \"Acceptă tot\", sunteți de acord cu utilizarea cookie-urilor.",
+        privacy: "Politica de confidențialitate",
+        customize: "Personalizează",
+        reject: "Respinge tot",
+        accept: "Acceptă tot",
+        essential: "Cookie-uri esențiale",
+        essentialDesc: "Necesare pentru funcționalitatea site-ului",
+        analytics: "Cookie-uri analitice",
+        analyticsDesc: "Ajută la înțelegerea interacțiunilor vizitatorilor",
+        performance: "Cookie-uri de performanță",
+        performanceDesc: "Îmbunătățesc performanța site-ului",
+        advertising: "Cookie-uri publicitare",
+        advertisingDesc: "Furnizează reclame relevante",
+        other: "Alte Cookie-uri",
+        otherDesc: "Cookie-uri necategorizate",
+        save: "Salvează preferințele",
+        language: "Română",
+        statsTitle: "Statistici consimțământ",
+        statsAccepted: "Acceptat",
+        statsRejected: "Respins",
+        statsCustom: "Personalizat",
+        statsTotal: "Total",
+        statsPercentage: "Procent",
+        statsLast7Days: "Ultimele 7 Zile",
+        statsLast30Days: "Ultimele 30 Zile"
+    },
+    sk: {
+        title: "Rešpektujeme vaše súkromie",
+        description: "Používame cookies na zlepšenie vášho zážitku z prehliadania, poskytovanie personalizovaných reklám alebo obsahu a analýzu nášho prevádzky. Kliknutím na \"Prijať všetko\" súhlasíte s používaním súborov cookie.",
+        privacy: "Zásady ochrany osobných údajov",
+        customize: "Prispôsobiť",
+        reject: "Odmietnuť všetko",
+        accept: "Prijať všetko",
+        essential: "Nevyhnutné Cookies",
+        essentialDesc: "Nevyhnutné pre funkčnosť webu",
+        analytics: "Analytické Cookies",
+        analyticsDesc: "Pomáhajú pochopiť interakcie návštevníkov",
+        performance: "Výkonnostné Cookies",
+        performanceDesc: "Zlepšujú výkon webu",
+        advertising: "Reklamné Cookies",
+        advertisingDesc: "Poskytujú relevantné reklamy",
+        other: "Ostatné Cookies",
+        otherDesc: "Nekategorizované cookies",
+        save: "Uložiť nastavenia",
+        language: "Slovenčina",
+        statsTitle: "Štatistiky súhlasu",
+        statsAccepted: "Prijaté",
+        statsRejected: "Odmietnuté",
+        statsCustom: "Prispôsobené",
+        statsTotal: "Celkom",
+        statsPercentage: "Percento",
+        statsLast7Days: "Posledných 7 Dní",
+        statsLast30Days: "Posledných 30 Dní"
+    },
+    sl: {
+        title: "Spoštujemo vašo zasebnost",
+        description: "Uporabljamo piškotke za izboljšanje vaše izkušnje brskanja, zagotavljanje prilagojenih oglasov ali vsebin in analizo našega prometa. S klikom na \"Sprejmi vse\" se strinjate z uporabo piškotkov.",
+        privacy: "Politika zasebnosti",
+        customize: "Prilagodi",
+        reject: "Zavrni vse",
+        accept: "Sprejmi vse",
+        essential: "Bistveni piškotki",
+        essentialDesc: "Nujni za delovanje spletnega mesta",
+        analytics: "Analitični piškotki",
+        analyticsDesc: "Pomagajo razumeti interakcije obiskovalcev",
+        performance: "Piškotki za zmogljivost",
+        performanceDesc: "Izboljšajo zmogljivost spletnega mesta",
+        advertising: "Oglasni piškotki",
+        advertisingDesc: "Zagotavljajo ustrezne oglase",
+        other: "Drugi piškotki",
+        otherDesc: "Nekategorizirani piškotki",
+        save: "Shrani nastavitve",
+        language: "Slovenščina",
+        statsTitle: "Statistika privolitve",
+        statsAccepted: "Sprejeto",
+        statsRejected: "Zavrnjeno",
+        statsCustom: "Prilagojeno",
+        statsTotal: "Skupaj",
+        statsPercentage: "Odstotek",
+        statsLast7Days: "Zadnjih 7 Dni",
+        statsLast30Days: "Zadnjih 30 Dni"
+    },
+    bg: {
+        title: "Уважаваме вашата поверителност",
+        description: "Използваме бисквитки, за да подобрим вашето сърфиране, да предоставяме персонализирани реклами или съдържание и да анализираме нашия трафик. С натискане на \"Приеми всички\" вие се съгласявате с използването на бисквитки.",
+        privacy: "Политика за поверителност",
+        customize: "Персонализиране",
+        reject: "Отхвърли всички",
+        accept: "Приеми всички",
+        essential: "Основни бисквитки",
+        essentialDesc: "Необходими за функционалността на сайта",
+        analytics: "Аналитични бисквитки",
+        analyticsDesc: "Помагат за разбиране на взаимодействията",
+        performance: "Бисквитки за производителност",
+        performanceDesc: "Подобряват производителността на сайта",
+        advertising: "Рекламни бисквитки",
+        advertisingDesc: "Доставят релевантни реклами",
+        other: "Други бисквитки",
+        otherDesc: "Некласифицирани бисквитки",
+        save: "Запази настройките",
+        language: "Български",
+        statsTitle: "Статистика за съгласие",
+        statsAccepted: "Прието",
+        statsRejected: "Отхвърлено",
+        statsCustom: "Персонализирано",
+        statsTotal: "Общо",
+        statsPercentage: "Процент",
+        statsLast7Days: "Последните 7 Дни",
+        statsLast30Days: "Последните 30 Дни"
+    },
+    hr: {
+        title: "Poštujemo vašu privatnost",
+        description: "Koristimo kolačiće za poboljšanje vašeg iskustva pregledavanja, pružanje personaliziranih oglasa ili sadržaja i analizu našeg prometa. Klikom na \"Prihvati sve\" pristajete na korištenje kolačića.",
+        privacy: "Politika privatnosti",
+        customize: "Prilagodi",
+        reject: "Odbaci sve",
+        accept: "Prihvati sve",
+        essential: "Osnovni kolačići",
+        essentialDesc: "Potrebni za funkcionalnost web stranice",
+        analytics: "Analitički kolačići",
+        analyticsDesc: "Pomažu razumjeti interakcije posjetitelja",
+        performance: "Kolačići performansi",
+        performanceDesc: "Poboljšavaju performanse web stranice",
+        advertising: "Oglasni kolačići",
+        advertisingDesc: "Pružaju relevantne oglase",
+        other: "Ostali kolačići",
+        otherDesc: "Nekategorizirani kolačići",
+        save: "Spremi postavke",
+        language: "Hrvatski",
+        statsTitle: "Statistika pristanka",
+        statsAccepted: "Prihvaćeno",
+        statsRejected: "Odbijeno",
+        statsCustom: "Prilagođeno",
+        statsTotal: "Ukupno",
+        statsPercentage: "Postotak",
+        statsLast7Days: "Zadnjih 7 Dana",
+        statsLast30Days: "Zadnjih 30 Dana"
+    },
+    lt: {
+        title: "Mes gerbiame jūsų privatumą",
+        description: "Mes naudojame slapukus, kad pagerintume jūsų naršymo patirtį, teiktume suasmenintas reklamas ar turinį ir analizuotume savo srautą. Spustelėję \"Priimti viską\" sutinkate su slapukų naudojimu.",
+        privacy: "Privatumo politika",
+        customize: "Pritaikyti",
+        reject: "Atmesti viską",
+        accept: "Priimti viską",
+        essential: "Būtini slapukai",
+        essentialDesc: "Būtini svetainės funkcionalumui",
+        analytics: "Analitiniai slapukai",
+        analyticsDesc: "Padeda suprasti lankytojų sąveiką",
+        performance: "Veiklos slapukai",
+        performanceDesc: "Pagerina svetainės veikimą",
+        advertising: "Reklaminiai slapukai",
+        advertisingDesc: "Teikia aktualias reklamas",
+        other: "Kiti slapukai",
+        otherDesc: "Nekategorizuoti slapukai",
+        save: "Išsaugoti nuostatas",
+        language: "Lietuvių",
+        statsTitle: "Sutikimo statistika",
+        statsAccepted: "Priimta",
+        statsRejected: "Atmesta",
+        statsCustom: "Pritaikyta",
+        statsTotal: "Iš viso",
+        statsPercentage: "Procentas",
+        statsLast7Days: "Paskutinės 7 Dienos",
+        statsLast30Days: "Paskutinės 30 Dienų"
+    },
+    lv: {
+        title: "Mēs cienām jūsu privātumu",
+        description: "Mēs izmantojam sīkfailus, lai uzlabotu jūsu pārlūkošanas pieredzi, nodrošinātu personalizētus reklāmas vai saturu un analizētu mūsu satiksmi. Noklikšķinot uz \"Piekrist visiem\", jūs piekrītat sīkfailu izmantošanai.",
+        privacy: "Privātuma politika",
+        customize: "Pielāgot",
+        reject: "Noraidīt visus",
+        accept: "Piekrist visiem",
+        essential: "Būtiskie sīkfaili",
+        essentialDesc: "Nepieciešami vietnes funkcionalitātei",
+        analytics: "Analītiskie sīkfaili",
+        analyticsDesc: "Palīdz izprast apmeklētāju mijiedarbību",
+        performance: "Veiktspējas sīkfaili",
+        performanceDesc: "Uzlabo vietnes veiktspēju",
+        advertising: "Reklāmas sīkfaili",
+        advertisingDesc: "Nodrošina atbilstošas reklāmas",
+        other: "Citi sīkfaili",
+        otherDesc: "Nekategorizēti sīkfaili",
+        save: "Saglabāt iestatījumus",
+        language: "Latviešu",
+        statsTitle: "Piekrišanas statistika",
+        statsAccepted: "Piekrituši",
+        statsRejected: "Noraidīti",
+        statsCustom: "Pielāgoti",
+        statsTotal: "Kopā",
+        statsPercentage: "Procenti",
+        statsLast7Days: "Pēdējās 7 Dienas",
+        statsLast30Days: "Pēdējās 30 Dienas"
+    },
+    et: {
+        title: "Me austame teie privaatsust",
+        description: "Kasutame küpsiseid, et parandada teie veebilehitsemise kogemust, pakkuda personaalseid reklaame või sisu ning analüüsida oma liiklust. Klõpsates nupul \"Nõustu kõigega\", nõustute küpsiste kasutamisega.",
+        privacy: "Privaatsuspoliitika",
+        customize: "Kohanda",
+        reject: "Keeldu kõigest",
+        accept: "Nõustu kõigega",
+        essential: "Olulised küpsised",
+        essentialDesc: "Vajalikud veebisaidi toimimiseks",
+        analytics: "Analüütilised küpsised",
+        analyticsDesc: "Aitavad mõista külastajate suhtlemist",
+        performance: "Töökindluse küpsised",
+        performanceDesc: "Parandavad veebisaidi jõudlust",
+        advertising: "Reklaamiküpsised",
+        advertisingDesc: "Pakuvad asjakohaseid reklaame",
+        other: "Muud küpsised",
+        otherDesc: "Liigitamata küpsised",
+        save: "Salvesta eelistused",
+        language: "Eesti",
+        statsTitle: "Nõusoleku statistika",
+        statsAccepted: "Nõustutud",
+        statsRejected: "Keeldutud",
+        statsCustom: "Kohandatud",
+        statsTotal: "Kokku",
+        statsPercentage: "Protsent",
+        statsLast7Days: "Viimased 7 Päeva",
+        statsLast30Days: "Viimased 30 Päeva"
+    },
+    mt: {
+        title: "Nirrispettaw il-privatezza tiegħek",
+        description: "Nużaw cookies biex ittejjeb l-esperjenza tiegħek ta 'navigazzjoni, nipprovdu reklami jew kontent personalizzat u nanalizzaw it-traffiku tagħna. Billi tikklikkja \"Aċċetta Kollox\", qed tagħti l-kunsens għall-użu ta 'cookies.",
+        privacy: "Politika tal-Privatezza",
+        customize: "Ippersonalizza",
+        reject: "Irrifjuta Kollox",
+        accept: "Aċċetta Kollox",
+        essential: "Cookies Essenzjali",
+        essentialDesc: "Meħtieġa għall-funzjonalità tas-sit",
+        analytics: "Cookies Analitiċi",
+        analyticsDesc: "Jgħin fuq interazzjonijiet tal-viżitatur",
+        performance: "Cookies ta 'Prestazzjoni",
+        performanceDesc: "Ittejjeb il-prestazzjoni tas-sit",
+        advertising: "Cookies tar-Reklamar",
+        advertisingDesc: "Ipprovdi reklami rilevanti",
+        other: "Cookies Oħra",
+        otherDesc: "Cookies mhux kategorizzati",
+        save: "Issejvja l-Preferenzi",
+        language: "Malti",
+        statsTitle: "Statistika tal-Kunsens",
+        statsAccepted: "Aċċettat",
+        statsRejected: "Rrifjutat",
+        statsCustom: "Ippersonalizzat",
+        statsTotal: "Total",
+        statsPercentage: "Perċentwal",
+        statsLast7Days: "Aħħar 7 Ġranet",
+        statsLast30Days: "Aħħar 30 Ġranet"
+    },
+
+    // ... (keep all other language translations the same)
 };
 
-// Country to language mapping
+// Country to language mapping for auto-translation
 const countryLanguageMap = {
-    'AT': 'de', 'BE': ['nl', 'fr'], 'BG': 'bg', 'HR': 'hr', 'CY': 'el', 'CZ': 'cs', 'DK': 'da',
-    'EE': 'et', 'FI': 'fi', 'FR': 'fr', 'DE': 'de', 'GR': 'el', 'HU': 'hu', 'IE': 'en', 'IT': 'it',
-    'LV': 'lv', 'LT': 'lt', 'LU': ['fr', 'de'], 'MT': 'mt', 'NL': 'nl', 'PL': 'pl', 'PT': 'pt',
-    'RO': 'ro', 'SK': 'sk', 'SI': 'sl', 'ES': 'es', 'SE': 'sv', 'AL': 'en', 'BA': 'en', 'IS': 'en',
-    'LI': 'de', 'MK': 'en', 'NO': 'en', 'RS': 'en', 'CH': ['de', 'fr', 'it'], 'UA': 'uk', 'GB': 'en',
-    'US': 'en', 'CA': ['en', 'fr'], 'AU': 'en', 'NZ': 'en', 'ZA': 'en', 'IN': 'en', 'CN': 'zh',
-    'JP': 'ja', 'KR': 'ko', 'BR': 'pt', 'MX': 'es', 'AR': 'es', 'RU': 'ru'
+    // EU Countries
+    'AT': 'de',     // Austria
+    'BE': 'nl',     // Belgium (Dutch)
+    'BE': 'fr',     // Belgium (French)
+    'BG': 'bg',     // Bulgaria
+    'HR': 'hr',     // Croatia
+    'CY': 'el',     // Cyprus
+    'CZ': 'cs',     // Czech Republic
+    'DK': 'da',     // Denmark
+    'EE': 'et',     // Estonia
+    'FI': 'fi',     // Finland
+    'FR': 'fr',     // France
+    'DE': 'de',     // Germany
+    'GR': 'el',     // Greece
+    'HU': 'hu',     // Hungary
+    'IE': 'en',     // Ireland
+    'IT': 'it',     // Italy
+    'LV': 'lv',     // Latvia
+    'LT': 'lt',     // Lithuania
+    'LU': 'fr',     // Luxembourg
+    'LU': 'de',     // Luxembourg
+    'MT': 'mt',     // Malta
+    'NL': 'nl',     // Netherlands
+    'PL': 'pl',     // Poland
+    'PT': 'pt',     // Portugal
+    'RO': 'ro',     // Romania
+    'SK': 'sk',     // Slovakia
+    'SI': 'sl',     // Slovenia
+    'ES': 'es',     // Spain
+    'SE': 'sv',     // Sweden
+    
+    // Other European countries
+    'AL': 'en',     // Albania
+    'BA': 'en',     // Bosnia and Herzegovina
+    'IS': 'en',     // Iceland
+    'LI': 'de',     // Liechtenstein
+    'MK': 'en',     // North Macedonia
+    'NO': 'en',     // Norway
+    'RS': 'en',     // Serbia
+    'CH': 'de',     // Switzerland
+    'CH': 'fr',     // Switzerland
+    'CH': 'it',     // Switzerland
+    'UA': 'uk',     // Ukraine
+    'GB': 'en',     // United Kingdom
+    
+    // Rest of the world
+    'US': 'en',     // United States
+    'CA': 'en',     // Canada
+    'CA': 'fr',     // Canada (French)
+    'AU': 'en',     // Australia
+    'NZ': 'en',     // New Zealand
+    'ZA': 'en',     // South Africa
+    'IN': 'en',     // India
+    'CN': 'zh',     // China
+    'JP': 'ja',     // Japan
+    'KR': 'ko',     // South Korea
+    'BR': 'pt',     // Brazil
+    'MX': 'es',     // Mexico
+    'AR': 'es',     // Argentina
+    'RU': 'ru'      // Russia
 };
 
-// Analytics and history storage
+// Analytics data storage
 let consentAnalytics = {
-    total: { accepted: 0, rejected: 0, custom: 0 },
+    total: {
+        accepted: 0,
+        rejected: 0,
+        custom: 0
+    },
     daily: {},
     weekly: {},
-    monthly: {},
-    history: [] // New history tracking
+    monthly: {}
 };
 
+// Password protection for analytics
 let isDashboardAuthenticated = false;
 
-// Load analytics data
+// Load analytics data from localStorage
 function loadAnalyticsData() {
     const savedData = localStorage.getItem('consentAnalytics');
     if (savedData) {
         consentAnalytics = JSON.parse(savedData);
     }
     
+    // Initialize today's data if not exists
     const today = new Date().toISOString().split('T')[0];
     if (!consentAnalytics.daily[today]) {
-        consentAnalytics.daily[today] = { accepted: 0, rejected: 0, custom: 0 };
+        consentAnalytics.daily[today] = {
+            accepted: 0,
+            rejected: 0,
+            custom: 0
+        };
     }
     
+    // Check if dashboard is authenticated
     if (config.analytics.passwordProtect) {
         isDashboardAuthenticated = getCookie('dashboard_auth') === 'true';
     } else {
@@ -313,15 +939,14 @@ function loadAnalyticsData() {
     }
 }
 
-// Save analytics data
+// Save analytics data to localStorage
 function saveAnalyticsData() {
     localStorage.setItem('consentAnalytics', JSON.stringify(consentAnalytics));
 }
 
-// Update analytics and history
-function updateConsentStats(status, consentData) {
+// Update analytics data
+function updateConsentStats(status) {
     const today = new Date().toISOString().split('T')[0];
-    const timestamp = new Date().toISOString();
     
     // Update totals
     if (status === 'accepted') {
@@ -335,43 +960,40 @@ function updateConsentStats(status, consentData) {
         consentAnalytics.daily[today].custom++;
     }
     
-    // Update history
-    consentAnalytics.history.push({
-        timestamp,
-        status,
-        categories: consentData.categories,
-        userAgent: navigator.userAgent,
-        ip: 'anonymous' // Note: Actual IP collection requires server-side implementation
-    });
-    
-    // Clean up old history entries
-    const cutoffDate = new Date();
-    cutoffDate.setDate(cutoffDate.getDate() - config.analytics.storageDays);
-    consentAnalytics.history = consentAnalytics.history.filter(entry => 
-        new Date(entry.timestamp) > cutoffDate
-    );
-    
+    // Update weekly and monthly stats
     updateTimeBasedStats(today, status);
+    
     saveAnalyticsData();
 }
 
-// Update time-based stats
+// Update weekly and monthly stats
 function updateTimeBasedStats(date, status) {
     const dateObj = new Date(date);
     const year = dateObj.getFullYear();
     const month = dateObj.getMonth() + 1;
     const week = getWeekNumber(dateObj);
     
+    // Weekly stats
     const weekKey = `${year}-W${week}`;
     if (!consentAnalytics.weekly[weekKey]) {
-        consentAnalytics.weekly[weekKey] = { accepted: 0, rejected: 0, custom: 0 };
+        consentAnalytics.weekly[weekKey] = {
+            accepted: 0,
+            rejected: 0,
+            custom: 0
+        };
     }
     
+    // Monthly stats
     const monthKey = `${year}-${month}`;
     if (!consentAnalytics.monthly[monthKey]) {
-        consentAnalytics.monthly[monthKey] = { accepted: 0, rejected: 0, custom: 0 };
+        consentAnalytics.monthly[monthKey] = {
+            accepted: 0,
+            rejected: 0,
+            custom: 0
+        };
     }
     
+    // Update counts
     if (status === 'accepted') {
         consentAnalytics.weekly[weekKey].accepted++;
         consentAnalytics.monthly[monthKey].accepted++;
@@ -384,6 +1006,7 @@ function updateTimeBasedStats(date, status) {
     }
 }
 
+// Helper function to get week number
 function getWeekNumber(date) {
     const d = new Date(date);
     d.setHours(0, 0, 0, 0);
@@ -392,26 +1015,32 @@ function getWeekNumber(date) {
     return 1 + Math.round(((d - week1) / 86400000 - 3 + (week1.getDay() + 6) % 7) / 7);
 }
 
-// Generate analytics dashboard with charts
+// Generate analytics dashboard HTML
 function generateAnalyticsDashboard(language = 'en') {
     const lang = translations[language] || translations.en;
-    const total = consentAnalytics.total.accepted + consentAnalytics.total.rejected + consentAnalytics.total.custom;
+    
+    // Calculate totals
+    const total = consentAnalytics.total.accepted + 
+                 consentAnalytics.total.rejected + 
+                 consentAnalytics.total.custom;
+    
     const acceptedPercent = total > 0 ? Math.round((consentAnalytics.total.accepted / total) * 100) : 0;
     const rejectedPercent = total > 0 ? Math.round((consentAnalytics.total.rejected / total) * 100) : 0;
     const customPercent = total > 0 ? Math.round((consentAnalytics.total.custom / total) * 100) : 0;
     
-    // Get data for charts
+    // Get last 7 days data
     const last7Days = {};
-    const dates7 = Object.keys(consentAnalytics.daily).sort().reverse().slice(0, 7);
-    dates7.forEach(date => last7Days[date] = consentAnalytics.daily[date]);
+    const dates = Object.keys(consentAnalytics.daily).sort().reverse().slice(0, 7);
+    dates.forEach(date => {
+        last7Days[date] = consentAnalytics.daily[date];
+    });
     
+    // Get last 30 days data
     const last30Days = {};
-    const dates30 = Object.keys(consentAnalytics.daily).sort().reverse().slice(0, 30);
-    dates30.forEach(date => last30Days[date] = consentAnalytics.daily[date]);
-    
-    // Generate canvas IDs
-    const chart7DaysId = `chart-7days-${Math.random().toString(36).substr(2, 9)}`;
-    const chart30DaysId = `chart-30days-${Math.random().toString(36).substr(2, 9)}`;
+    const monthlyDates = Object.keys(consentAnalytics.daily).sort().reverse().slice(0, 30);
+    monthlyDates.forEach(date => {
+        last30Days[date] = consentAnalytics.daily[date];
+    });
     
     return `
     <div class="analytics-dashboard">
@@ -423,16 +1052,19 @@ function generateAnalyticsDashboard(language = 'en') {
                 <div class="stat-value">${consentAnalytics.total.accepted}</div>
                 <div class="stat-percentage">${acceptedPercent}%</div>
             </div>
+            
             <div class="stat-card rejected">
                 <h4>${lang.statsRejected}</h4>
                 <div class="stat-value">${consentAnalytics.total.rejected}</div>
                 <div class="stat-percentage">${rejectedPercent}%</div>
             </div>
+            
             <div class="stat-card custom">
                 <h4>${lang.statsCustom}</h4>
                 <div class="stat-value">${consentAnalytics.total.custom}</div>
                 <div class="stat-percentage">${customPercent}%</div>
             </div>
+            
             <div class="stat-card total">
                 <h4>${lang.statsTotal}</h4>
                 <div class="stat-value">${total}</div>
@@ -440,135 +1072,68 @@ function generateAnalyticsDashboard(language = 'en') {
             </div>
         </div>
         
-        <div class="analytics-controls">
-            <button id="toggleAnalytics" class="${config.analytics.enabled ? 'active' : ''}">
-                Analytics: ${config.analytics.enabled ? 'ON' : 'OFF'}
-            </button>
-            <button id="clearAnalytics">Clear Analytics Data</button>
-        </div>
-        
         <div class="time-based-stats">
             <div class="time-stat">
                 <h4>${lang.statsLast7Days}</h4>
-                <canvas id="${chart7DaysId}" height="200"></canvas>
+                <div class="stat-bars">
+                    ${Object.entries(last7Days).map(([date, data]) => {
+                        const dayTotal = data.accepted + data.rejected + data.custom;
+                        const dayAcceptedPercent = dayTotal > 0 ? (data.accepted / dayTotal) * 100 : 0;
+                        const dayRejectedPercent = dayTotal > 0 ? (data.rejected / dayTotal) * 100 : 0;
+                        const dayCustomPercent = dayTotal > 0 ? (data.custom / dayTotal) * 100 : 0;
+                        
+                        return `
+                        <div class="stat-bar-container">
+                            <div class="stat-bar-label">${date}</div>
+                            <div class="stat-bar">
+                                <div class="stat-bar-segment accepted" style="width: ${dayAcceptedPercent}%"></div>
+                                <div class="stat-bar-segment custom" style="width: ${dayCustomPercent}%"></div>
+                                <div class="stat-bar-segment rejected" style="width: ${dayRejectedPercent}%"></div>
+                            </div>
+                            <div class="stat-bar-legend">
+                                <span>${data.accepted} ${lang.statsAccepted}</span>
+                                <span>${data.custom} ${lang.statsCustom}</span>
+                                <span>${data.rejected} ${lang.statsRejected}</span>
+                            </div>
+                        </div>`;
+                    }).join('')}
+                </div>
             </div>
+            
             <div class="time-stat">
                 <h4>${lang.statsLast30Days}</h4>
-                <canvas id="${chart30DaysId}" height="200"></canvas>
+                <div class="stat-bars">
+                    ${Object.entries(last30Days).map(([date, data]) => {
+                        const dayTotal = data.accepted + data.rejected + data.custom;
+                        const dayAcceptedPercent = dayTotal > 0 ? (data.accepted / dayTotal) * 100 : 0;
+                        const dayRejectedPercent = dayTotal > 0 ? (data.rejected / dayTotal) * 100 : 0;
+                        const dayCustomPercent = dayTotal > 0 ? (data.custom / dayTotal) * 100 : 0;
+                        
+                        return `
+                        <div class="stat-bar-container">
+                            <div class="stat-bar-label">${date}</div>
+                            <div class="stat-bar">
+                                <div class="stat-bar-segment accepted" style="width: ${dayAcceptedPercent}%"></div>
+                                <div class="stat-bar-segment custom" style="width: ${dayCustomPercent}%"></div>
+                                <div class="stat-bar-segment rejected" style="width: ${dayRejectedPercent}%"></div>
+                            </div>
+                            <div class="stat-bar-legend">
+                                <span>${data.accepted} ${lang.statsAccepted}</span>
+                                <span>${data.custom} ${lang.statsCustom}</span>
+                                <span>${data.rejected} ${lang.statsRejected}</span>
+                            </div>
+                        </div>`;
+                    }).join('')}
+                </div>
             </div>
         </div>
-        
-        <div class="consent-history">
-            <h4>${lang.historyTitle}</h4>
-            <div class="history-table-container">
-                <table class="history-table">
-                    <thead>
-                        <tr>
-                            <th>Timestamp</th>
-                            <th>Status</th>
-                            <th>Categories</th>
-                            <th>User Agent</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        ${consentAnalytics.history.slice(0, 50).map(entry => `
-                            <tr>
-                                <td>${new Date(entry.timestamp).toLocaleString()}</td>
-                                <td>${entry.status}</td>
-                                <td>${Object.entries(entry.categories)
-                                    .filter(([_, enabled]) => enabled)
-                                    .map(([category]) => category)
-                                    .join(', ')}</td>
-                                <td>${entry.userAgent.substring(0, 50)}...</td>
-                            </tr>
-                        `).join('')}
-                    </tbody>
-                </table>
-            </div>
-        </div>
-        
-        <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
-        <script>
-            // 7 Days Chart
-            new Chart(document.getElementById('${chart7DaysId}'), {
-                type: 'bar',
-                data: {
-                    labels: ${JSON.stringify(dates7.reverse())},
-                    datasets: [{
-                        label: '${lang.statsAccepted}',
-                        data: ${JSON.stringify(dates7.map(date => last7Days[date]?.accepted || 0))},
-                        backgroundColor: '${colorScheme.primary}',
-                        borderColor: '${colorScheme.primary}',
-                        borderWidth: 1
-                    }, {
-                        label: '${lang.statsCustom}',
-                        data: ${JSON.stringify(dates7.map(date => last7Days[date]?.custom || 0))},
-                        backgroundColor: '${colorScheme.secondary}',
-                        borderColor: '${colorScheme.secondary}',
-                        borderWidth: 1
-                    }, {
-                        label: '${lang.statsRejected}',
-                        data: ${JSON.stringify(dates7.map(date => last7Days[date]?.rejected || 0))},
-                        backgroundColor: '${colorScheme.danger}',
-                        borderColor: '${colorScheme.danger}',
-                        borderWidth: 1
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    scales: {
-                        x: { stacked: true },
-                        y: { stacked: true, beginAtZero: true }
-                    },
-                    plugins: {
-                        legend: { position: 'top' }
-                    }
-                }
-            });
-
-            // 30 Days Chart
-            new Chart(document.getElementById('${chart30DaysId}'), {
-                type: 'bar',
-                data: {
-                    labels: ${JSON.stringify(dates30.reverse())},
-                    datasets: [{
-                        label: '${lang.statsAccepted}',
-                        data: ${JSON.stringify(dates30.map(date => last30Days[date]?.accepted || 0))},
-                        backgroundColor: '${colorScheme.primary}',
-                        borderColor: '${colorScheme.primary}',
-                        borderWidth: 1
-                    }, {
-                        label: '${lang.statsCustom}',
-                        data: ${JSON.stringify(dates30.map(date => last30Days[date]?.custom || 0))},
-                        backgroundColor: '${colorScheme.secondary}',
-                        borderColor: '${colorScheme.secondary}',
-                        borderWidth: 1
-                    }, {
-                        label: '${lang.statsRejected}',
-                        data: ${JSON.stringify(dates30.map(date => last30Days[date]?.rejected || 0))},
-                        backgroundColor: '${colorScheme.danger}',
-                        borderColor: '${colorScheme.danger}',
-                        borderWidth: 1
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    scales: {
-                        x: { stacked: true },
-                        y: { stacked: true, beginAtZero: true }
-                    },
-                    plugins: {
-                        legend: { position: 'top' }
-                    }
-                }
-            });
-        </script>
     </div>`;
 }
 
-// Password prompt
+// Generate password prompt HTML
 function generatePasswordPrompt(language = 'en') {
     const lang = translations[language] || translations.en;
+    
     return `
     <div class="password-prompt">
         <h3>${lang.passwordPrompt}</h3>
@@ -578,49 +1143,60 @@ function generatePasswordPrompt(language = 'en') {
     </div>`;
 }
 
-// Domain check
+// Check if current domain is allowed
 function isDomainAllowed() {
     if (config.allowedDomains.length === 0) return true;
+    
     const currentDomain = window.location.hostname;
     return config.allowedDomains.some(domain => {
         if (domain.startsWith('.')) {
+            // Match subdomains (e.g., .example.com matches sub.example.com)
             return currentDomain === domain.substring(1) || currentDomain.endsWith(domain);
         }
         return currentDomain === domain;
     });
 }
 
-// Geo-targeting check
+// Check geo-targeting restrictions
 function checkGeoTargeting(geoData) {
+    // Check blocked locations first
     if (config.geoConfig.blockedCountries.length > 0 && 
         config.geoConfig.blockedCountries.includes(geoData.country)) {
         return false;
     }
+    
     if (config.geoConfig.blockedRegions.length > 0 && 
         config.geoConfig.blockedRegions.includes(geoData.region)) {
         return false;
     }
+    
     if (config.geoConfig.blockedCities.length > 0 && 
         config.geoConfig.blockedCities.includes(geoData.city)) {
         return false;
     }
+    
+    // Check allowed locations (if any restrictions are set)
     if (config.geoConfig.allowedCountries.length > 0 && 
         !config.geoConfig.allowedCountries.includes(geoData.country)) {
         return false;
     }
+    
     if (config.geoConfig.allowedRegions.length > 0 && 
         !config.geoConfig.allowedRegions.includes(geoData.region)) {
         return false;
     }
+    
     if (config.geoConfig.allowedCities.length > 0 && 
         !config.geoConfig.allowedCities.includes(geoData.city)) {
         return false;
     }
+    
     return true;
 }
 
-// Language detection
+// Detect user language based on country and browser settings
 function detectUserLanguage(geoData) {
+    // First check if language is stored in cookie
     if (config.behavior.rememberLanguage) {
         const preferredLanguage = getCookie('preferred_language');
         if (preferredLanguage && translations[preferredLanguage]) {
@@ -628,34 +1204,40 @@ function detectUserLanguage(geoData) {
         }
     }
     
+    // Then try to get language from country if auto-detection is enabled
     if (config.languageConfig.autoDetectLanguage && geoData && geoData.country) {
         const countryLang = countryLanguageMap[geoData.country];
-        const lang = Array.isArray(countryLang) ? countryLang[0] : countryLang;
-        if (lang && translations[lang]) {
-            return lang;
+        if (countryLang && translations[countryLang]) {
+            return countryLang;
         }
     }
     
+    // Fallback to browser language
     const browserLang = (navigator.language || 'en').split('-')[0];
     if (translations[browserLang]) {
         return browserLang;
     }
     
-    return config.languageConfig.defaultLanguage;
+    // Final fallback to configured default language
+    return config.languageConfig.defaultLanguage || 'en';
 }
 
-// Available languages
+// Get available languages for dropdown
 function getAvailableLanguages() {
+    // If specific languages are configured, use those
     if (config.languageConfig.availableLanguages.length > 0) {
         return config.languageConfig.availableLanguages.filter(lang => translations[lang]);
     }
+    
+    // Otherwise return all available languages
     return Object.keys(translations);
 }
 
-// Change language
+// Change language dynamically
 function changeLanguage(languageCode) {
     const lang = translations[languageCode] || translations.en;
     
+    // Update banner text
     const banner = document.getElementById('cookieConsentBanner');
     if (banner) {
         banner.querySelector('h2').textContent = lang.title;
@@ -666,9 +1248,12 @@ function changeLanguage(languageCode) {
         banner.querySelector('#rejectAllBtn').textContent = lang.reject;
     }
     
+    // Update modal text
     const modal = document.getElementById('cookieSettingsModal');
     if (modal) {
         modal.querySelector('h2').textContent = lang.title;
+        
+        // Update category headers and descriptions
         const categories = {
             'functional': 'essential',
             'analytics': 'analytics',
@@ -682,48 +1267,55 @@ function changeLanguage(languageCode) {
             if (categoryElement) {
                 const container = categoryElement.closest('.cookie-category');
                 container.querySelector('h3').textContent = lang[key];
-                container.querySelector('p').textContent = lang[`${key}Desc`];
+                container.querySelector('p').textContent = lang[`${categoryKey}Desc`];
             }
         }
         
+        // Update buttons
         modal.querySelector('#rejectAllSettingsBtn').textContent = lang.reject;
         modal.querySelector('#saveSettingsBtn').textContent = lang.save;
         modal.querySelector('#acceptAllSettingsBtn').textContent = lang.accept;
     }
     
+    // Update floating button title
     const floatingButton = document.getElementById('cookieFloatingButton');
     if (floatingButton) {
         floatingButton.title = lang.title;
     }
     
+    // Update analytics dashboard if visible
     const dashboard = document.querySelector('.analytics-dashboard');
     if (dashboard) {
         dashboard.innerHTML = generateAnalyticsDashboard(languageCode);
-        setupDashboardControls();
     }
     
+    // Update password prompt if visible
     const passwordPrompt = document.querySelector('.password-prompt');
     if (passwordPrompt) {
         passwordPrompt.innerHTML = generatePasswordPrompt(languageCode);
         setupPasswordPromptEvents();
     }
     
+    // Store selected language in cookie
     if (config.behavior.rememberLanguage) {
         setCookie('preferred_language', languageCode, 365);
     }
 }
 
-// Main initialization
+// Main initialization with enhanced cookie scanning
 document.addEventListener('DOMContentLoaded', function() {
+    // First check if we should run on this domain
     if (!isDomainAllowed()) {
         console.log('Cookie consent banner disabled for this domain');
         return;
     }
     
+    // Load analytics data
     if (config.analytics.enabled) {
         loadAnalyticsData();
     }
     
+    // Get geo data from dataLayer or detect
     let geoData = {};
     if (window.dataLayer && window.dataLayer.length > 0) {
         const geoItem = window.dataLayer.find(item => item.country || item.region || item.city);
@@ -737,15 +1329,19 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
     
+    // Check geo-targeting restrictions
     if (!checkGeoTargeting(geoData)) {
         console.log('Cookie consent banner disabled for this location');
         return;
     }
     
+    // Detect language
     const detectedLanguage = detectUserLanguage(geoData);
+    
     const detectedCookies = scanAndCategorizeCookies();
     if (detectedCookies.uncategorized.length > 0) {
         console.log('Uncategorized cookies found:', detectedCookies.uncategorized);
+        // Try to automatically categorize unknown cookies
         autoCategorizeCookies(detectedCookies.uncategorized).forEach(cookie => {
             const category = determineCookieCategory(cookie.name);
             if (category && category !== 'uncategorized') {
@@ -762,21 +1358,24 @@ document.addEventListener('DOMContentLoaded', function() {
         showFloatingButton();
     }
     
+    // Track marketing parameters
     trackMarketingParameters();
     
+    // Enhanced periodic cookie scan with validation
     setInterval(() => {
         const newCookies = scanAndCategorizeCookies();
         if (JSON.stringify(newCookies) !== JSON.stringify(detectedCookies)) {
             updateCookieTables(newCookies);
         }
-    }, 30000);
+    }, 30000); // Scan every 30 seconds
     
+    // Handle scroll-based acceptance
     if (config.behavior.acceptOnScroll) {
         window.addEventListener('scroll', handleScrollAcceptance);
     }
 });
 
-// Scroll-based acceptance
+// Handle scroll-based acceptance
 function handleScrollAcceptance() {
     if (getCookie('cookie_consent')) {
         window.removeEventListener('scroll', handleScrollAcceptance);
@@ -784,7 +1383,7 @@ function handleScrollAcceptance() {
     }
     
     const scrollPercentage = (window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100;
-    if (scrollPercentage > 50) {
+    if (scrollPercentage > 50) { // Accept if scrolled more than 50%
         acceptAllCookies();
         hideCookieBanner();
         showFloatingButton();
@@ -792,7 +1391,7 @@ function handleScrollAcceptance() {
     }
 }
 
-// Auto-categorize cookies
+// Function to automatically categorize unknown cookies
 function autoCategorizeCookies(uncategorizedCookies) {
     return uncategorizedCookies.map(cookie => {
         const category = determineCookieCategory(cookie.name);
@@ -807,17 +1406,34 @@ function autoCategorizeCookies(uncategorizedCookies) {
     });
 }
 
-// Determine cookie category
+// Function to determine cookie category based on name patterns
 function determineCookieCategory(cookieName) {
     const lowerName = cookieName.toLowerCase();
-    if (/_ga|_gid|_gat|analytics|stats|measure|track|tk_ai/.test(lowerName)) return 'analytics';
-    if (/_gcl|_fbp|fr|ad|ads|tracking|marketing|doubleclick|gclid/.test(lowerName)) return 'advertising';
-    if (/sess|token|auth|login|user|pref|settings|cart|checkout|hash|items/.test(lowerName)) return 'functional';
-    if (/perf|speed|optimize|cdn|cache/.test(lowerName)) return 'performance';
+    
+    // Analytics patterns
+    if (/_ga|_gid|_gat|analytics|stats|measure|track|tk_ai/.test(lowerName)) {
+        return 'analytics';
+    }
+    
+    // Advertising patterns
+    if (/_gcl|_fbp|fr|ad|ads|tracking|marketing|doubleclick|gclid/.test(lowerName)) {
+        return 'advertising';
+    }
+    
+    // Functional patterns
+    if (/sess|token|auth|login|user|pref|settings|cart|checkout|hash|items/.test(lowerName)) {
+        return 'functional';
+    }
+    
+    // Performance patterns
+    if (/perf|speed|optimize|cdn|cache/.test(lowerName)) {
+        return 'performance';
+    }
+    
     return null;
 }
 
-// Scan cookies
+// Enhanced cookie scanning function with better matching
 function scanAndCategorizeCookies() {
     const cookies = document.cookie.split(';');
     const result = {
@@ -833,6 +1449,8 @@ function scanAndCategorizeCookies() {
         if (!name) return;
         
         let categorized = false;
+        
+        // Check against known cookie patterns
         for (const pattern in cookieDatabase) {
             if (name.startsWith(pattern) || name === pattern) {
                 const cookieInfo = cookieDatabase[pattern];
@@ -860,6 +1478,7 @@ function scanAndCategorizeCookies() {
     return result;
 }
 
+// Enhanced getCookieDuration function
 function getCookieDuration(name) {
     const cookieMatch = document.cookie.match(new RegExp(`${name}=[^;]+(;|$)`));
     if (!cookieMatch) return "Session";
@@ -878,6 +1497,7 @@ function trackMarketingParameters() {
     const params = new URLSearchParams(window.location.search);
     const marketingData = {};
     
+    // Check for common marketing parameters
     if (params.has('gclid')) marketingData.gclid = params.get('gclid');
     if (params.has('fbclid')) marketingData.fbclid = params.get('fbclid');
     if (params.has('utm_source')) marketingData.utm_source = params.get('utm_source');
@@ -897,6 +1517,7 @@ function injectConsentHTML(detectedCookies, language = 'en') {
     const availableLanguages = getAvailableLanguages();
     const currentTheme = config.uiTheme === 'classic' ? classicColorScheme : colorScheme;
     
+    // Generate cookie tables for each category
     const generateCategorySection = (category) => {
         const cookies = detectedCookies[category];
         const categoryKey = category === 'functional' ? 'essential' : category;
@@ -926,6 +1547,7 @@ function injectConsentHTML(detectedCookies, language = 'en') {
         </div>`;
     };
     
+    // Generate language selector dropdown if enabled
     const languageSelector = config.languageConfig.showLanguageSelector ? `
     <div class="language-selector">
         <select id="cookieLanguageSelect">
@@ -935,8 +1557,8 @@ function injectConsentHTML(detectedCookies, language = 'en') {
         </select>
     </div>` : '';
     
-    const adminButton = config.analytics.enabled && config.analytics.showDashboard && 
-        config.behavior.analyticsFloatingButtonEnabled ? `
+    // Generate admin dashboard button if analytics enabled
+    const adminButton = config.analytics.enabled && config.analytics.showDashboard ? `
     <div id="cookieAdminButton" class="cookie-admin-button" title="${lang.dashboardTitle}">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
             <path d="M288 160C252.7 160 224 188.7 224 224C224 259.3 252.7 288 288 288C323.3 288 352 259.3 352 224C352 188.7 323.3 160 288 160zM95.4 112.6C142.5 68.84 207.2 32 288 32C368.8 32 433.5 68.84 480.6 112.6C527.4 156 558.7 207.1 573.5 243.7C576.8 251.6 576.8 260.4 573.5 268.3C558.7 304 527.4 355.1 480.6 399.4C433.5 443.2 368.8 480 288 480C207.2 480 142.5 443.2 95.4 399.4C48.6 355.1 17.3 304 2.5 268.3C-.8 260.4-.8 251.6 2.5 243.7C17.3 207.1 48.6 156 95.4 112.6V112.6zM288 80C218.6 80 160 138.6 160 208C160 277.4 218.6 336 288 336C357.4 336 416 277.4 416 208C416 138.6 357.4 80 288 80zM44.96 256C56.53 286.1 83.51 329.2 124.4 368C165.3 406.8 219.1 432 288 432C356.9 432 410.7 406.8 451.6 368C492.5 329.2 519.5 286.1 531 256C519.5 225.9 492.5 182.8 451.6 144C410.7 105.2 356.9 80 288 80C219.1 80 165.3 105.2 124.4 144C83.51 182.8 56.53 225.9 44.96 256V256z"/>
@@ -945,7 +1567,7 @@ function injectConsentHTML(detectedCookies, language = 'en') {
     
     const html = `
     <!-- Main Consent Banner -->
-    <div id="cookieConsentBanner" class="cookie-consent-banner" style="display: none;">
+    <div id="cookieConsentBanner" class="cookie-consent-banner">
         <div class="cookie-consent-container">
             ${languageSelector}
             <div class="cookie-consent-content">
@@ -966,7 +1588,7 @@ function injectConsentHTML(detectedCookies, language = 'en') {
         <div class="cookie-settings-content">
             <div class="cookie-settings-header">
                 <h2>${lang.title}</h2>
-                <span class="close-modal">×</span>
+                <span class="close-modal">&times;</span>
             </div>
             <div class="cookie-settings-body">
                 ${generateCategorySection('functional')}
@@ -984,14 +1606,12 @@ function injectConsentHTML(detectedCookies, language = 'en') {
     </div>
 
     <!-- Floating Settings Button -->
-    ${config.behavior.floatingButtonEnabled ? `
     <div id="cookieFloatingButton" class="cookie-settings-button" title="${lang.title}">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
             <path d="M257.5 27.6c-.8-5.4-4.9-9.8-10.3-10.6c-22.1-3.1-44.6 .9-64.4 11.4l-74 39.5C89.1 78.4 73.2 94.9 63.4 115L26.7 190.6c-9.8 20.1-13 42.9-9.1 64.9l14.5 82.8c3.9 22.1 14.6 42.3 30.7 57.9l60.3 58.4c16.1 15.6 36.6 25.6 58.7 28.7l83 11.7c22.1 3.1 44.6-.9-64.4-11.4l74-39.5c19.7-10.5 35.6-27 45.4-47.2l36.7-75.5c9.8-20.1 13-42.9 9.1-64.9c-.9-5.7-5.9-9.9-11.6-9.9c-51.5 0-101.5-14.7-144.9-42.3l-61.2-42.4c-10.1-7-21.8-11.1-33.9-11.9c-12.1-.9-24.1 1.6-34.9 7.2l-61.2 35.1c-6.4 3.7-14.6 1.9-19.3-4.1s-4.7-13.7 1.1-18.4l61.2-42.4c43.4-30.1 97.1-46.4 151.8-46.4c5.7 0 10.7-4.1 11.6-9.8zM133.4 303.6c-25.9 0-46.9-21-46.9-46.9s21-46.9 46.9-46.9s46.9 21 46.9 46.9s-21 46.9-46.9 46.9zm116.1-90.3c-26.5 0-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48s-21.5-48-48-48zm92.3 99.7c-26.5 0-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48s-21.5-48-48-48z"/>
         </svg>
     </div>
-    ` : ''}
-
+    
     ${adminButton}
     
     <!-- Analytics Dashboard -->
@@ -999,7 +1619,7 @@ function injectConsentHTML(detectedCookies, language = 'en') {
         <div class="cookie-analytics-content">
             <div class="cookie-analytics-header">
                 <h2>${lang.dashboardTitle}</h2>
-                <span class="close-analytics-modal">×</span>
+                <span class="close-analytics-modal">&times;</span>
             </div>
             <div class="cookie-analytics-body">
                 ${config.analytics.passwordProtect && !isDashboardAuthenticated ? 
@@ -1010,23 +1630,24 @@ function injectConsentHTML(detectedCookies, language = 'en') {
     </div>
     
     <style>
+    /* Main Banner Styles - Updated to match image */
     .cookie-consent-banner {
         position: fixed;
         bottom: 20px;
-        ${config.behavior.bannerPosition === 'left' ? 'left: 20px;' : 'right: 20px;'}
-        width: ${config.uiCustomization.banner.width};
+        ${config.behavior.floatingButtonPosition === 'left' ? 'left: 20px;' : 'right: 20px;'}
+        width: 440px;
         background: ${currentTheme.background};
-        border-radius: ${config.uiCustomization.banner.borderRadius};
+        border-radius: 12px;
         box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
         z-index: 9999;
-        padding: ${config.uiCustomization.banner.padding};
+        padding: 24px;
         font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        display: none;
         transform: translateY(20px);
         opacity: 0;
         transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
         border: none;
         overflow: hidden;
-        ${!config.uiCustomization.banner.enabled ? 'display: none !important;' : ''}
     }
 
     .cookie-consent-banner.show {
@@ -1041,6 +1662,7 @@ function injectConsentHTML(detectedCookies, language = 'en') {
         color: ${currentTheme.textDark};
         font-weight: 600;
         line-height: 1.4;
+        letter-spacing: -0.2px;
     }
 
     .cookie-consent-content p {
@@ -1057,6 +1679,7 @@ function injectConsentHTML(detectedCookies, language = 'en') {
         font-weight: 500;
         display: inline-block;
         margin-bottom: 24px;
+        transition: color 0.2s ease;
     }
 
     .privacy-policy-link:hover {
@@ -1079,12 +1702,38 @@ function injectConsentHTML(detectedCookies, language = 'en') {
         text-align: center;
         border: none;
         flex: 1;
+        letter-spacing: 0.2px;
+    }
+
+    .adjust-btn {
+        background-color: #f8f9fa;
+        color: #333;
+        border: 1px solid #e0e0e0;
+    }
+
+    .adjust-btn:hover {
+        background-color: #f0f2f5;
+        transform: translateY(-1px);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    }
+
+    .reject-btn {
+        background-color: #fff;
+        color: ${currentTheme.danger};
+        border: 1px solid ${currentTheme.danger};
+    }
+
+    .reject-btn:hover {
+        background-color: #ffeeed;
+        transform: translateY(-1px);
+        box-shadow: 0 2px 8px rgba(231, 76, 60, 0.15);
     }
 
     .accept-btn {
-        background-color: ${config.uiCustomization.buttons.accept.backgroundColor};
-        color: ${config.uiCustomization.buttons.accept.textColor};
-        border: 1px solid ${config.uiCustomization.buttons.accept.borderColor};
+        background-color: ${currentTheme.primary};
+        color: white;
+        border: 1px solid ${currentTheme.primary};
+        box-shadow: 0 2px 12px rgba(46, 204, 113, 0.3);
     }
 
     .accept-btn:hover {
@@ -1093,39 +1742,7 @@ function injectConsentHTML(detectedCookies, language = 'en') {
         box-shadow: 0 4px 16px rgba(46, 204, 113, 0.4);
     }
 
-    .adjust-btn {
-        background-color: ${config.uiCustomization.buttons.adjust.backgroundColor};
-        color: ${config.uiCustomization.buttons.adjust.textColor};
-        border: 1px solid ${config.uiCustomization.buttons.adjust.borderColor};
-    }
-
-    .adjust-btn:hover {
-        background-color: #f0f2f5;
-        transform: translateY(-1px);
-    }
-
-    .reject-btn {
-        background-color: ${config.uiCustomization.buttons.reject.backgroundColor};
-        color: ${config.uiCustomization.buttons.reject.textColor};
-        border: 1px solid ${config.uiCustomization.buttons.reject.borderColor};
-    }
-
-    .reject-btn:hover {
-        background-color: #ffeeed;
-        transform: translateY(-1px);
-    }
-
-    .save-btn {
-        background-color: ${config.uiCustomization.buttons.save.backgroundColor};
-        color: ${config.uiCustomization.buttons.save.textColor};
-        border: 1px solid ${config.uiCustomization.buttons.save.borderColor};
-    }
-
-    .save-btn:hover {
-        background-color: #2980b9;
-        transform: translateY(-2px);
-    }
-
+    /* Language Selector Styles */
     .language-selector {
         position: absolute;
         top: 15px;
@@ -1140,6 +1757,7 @@ function injectConsentHTML(detectedCookies, language = 'en') {
         font-size: 13px;
         color: #333;
         cursor: pointer;
+        transition: all 0.2s ease;
     }
 
     .language-selector select:hover {
@@ -1147,6 +1765,13 @@ function injectConsentHTML(detectedCookies, language = 'en') {
         background-color: #fff;
     }
 
+    .language-selector select:focus {
+        outline: none;
+        border-color: ${currentTheme.secondary};
+        box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+    }
+
+    /* Settings Modal - Updated to 845x470 dimensions */
     .cookie-settings-modal {
         display: none;
         position: fixed;
@@ -1211,6 +1836,7 @@ function injectConsentHTML(detectedCookies, language = 'en') {
         background: none;
         border: none;
         padding: 0 10px;
+        transition: color 0.2s ease;
     }
 
     .close-modal:hover {
@@ -1228,6 +1854,14 @@ function injectConsentHTML(detectedCookies, language = 'en') {
         margin-bottom: 25px;
         padding-bottom: 20px;
         border-bottom: 1px solid #ecf0f1;
+        transition: all 0.3s ease;
+    }
+
+    .cookie-category:hover {
+        background-color: #f8f9fa;
+        border-radius: 8px;
+        padding: 20px;
+        margin-bottom: 20px;
     }
 
     .cookie-category:last-child {
@@ -1236,6 +1870,7 @@ function injectConsentHTML(detectedCookies, language = 'en') {
         padding-bottom: 0;
     }
 
+    /* Toggle Switch Styles */
     .toggle-container {
         display: flex;
         align-items: center;
@@ -1301,11 +1936,18 @@ function injectConsentHTML(detectedCookies, language = 'en') {
         cursor: not-allowed;
     }
 
+    /* Cookie Details */
     .cookie-details-container {
         margin-top: 15px;
         border: 1px solid #e0e0e0;
         border-radius: 8px;
         overflow: hidden;
+        transition: all 0.3s ease;
+    }
+
+    .cookie-details-container:hover {
+        box-shadow: 0 3px 12px rgba(0,0,0,0.1);
+        border-color: ${currentTheme.primary};
     }
 
     .cookie-details-header {
@@ -1316,6 +1958,11 @@ function injectConsentHTML(detectedCookies, language = 'en') {
         justify-content: space-between;
         align-items: center;
         cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+    .cookie-details-header:hover {
+        background-color: #eeeeee;
     }
 
     .cookie-details-content {
@@ -1323,6 +1970,12 @@ function injectConsentHTML(detectedCookies, language = 'en') {
         background-color: #fafafa;
         border-top: 1px solid #e0e0e0;
         display: none;
+        animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(-10px); }
+        to { opacity: 1; transform: translateY(0); }
     }
 
     .cookie-details-table {
@@ -1350,13 +2003,33 @@ function injectConsentHTML(detectedCookies, language = 'en') {
         border-bottom: none;
     }
 
+    .cookie-details-table tr:hover {
+        background-color: #f5f5f5;
+    }
+
+    .cookie-details-table code {
+        background-color: #f0f0f0;
+        padding: 2px 5px;
+        border-radius: 3px;
+        font-family: monospace;
+        color: ${currentTheme.textDark};
+    }
+
+    .no-cookies-message {
+        padding: 15px;
+        text-align: center;
+        color: #666;
+        font-style: italic;
+    }
+
+    /* Floating Settings Button */
     .cookie-settings-button {
         position: fixed;
         bottom: 30px;
         ${config.behavior.floatingButtonPosition === 'left' ? 'left: 30px;' : 'right: 30px;'}
-        width: ${config.uiCustomization.floatingIcons.consent.size};
-        height: ${config.uiCustomization.floatingIcons.consent.size};
-        background-color: ${config.uiCustomization.floatingIcons.consent.backgroundColor};
+        width: 60px;
+        height: 60px;
+        background-color: ${currentTheme.primary};
         border-radius: 50%;
         display: none;
         align-items: center;
@@ -1375,20 +2048,32 @@ function injectConsentHTML(detectedCookies, language = 'en') {
         transform: translateY(0);
     }
 
+    .cookie-settings-button:hover {
+        background-color: #27ae60;
+        transform: translateY(-3px) scale(1.05);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+    }
+
     .cookie-settings-button svg {
         width: 28px;
         height: 28px;
-        fill: ${config.uiCustomization.floatingIcons.consent.iconColor};
+        fill: white;
+        transition: transform 0.3s ease;
     }
 
+    .cookie-settings-button:hover svg {
+        transform: rotate(15deg);
+    }
+
+    /* Admin Button */
     .cookie-admin-button {
         position: fixed;
         ${config.behavior.floatingButtonPosition === 'left' ? 
           'left: 30px; bottom: 100px;' : 
           'right: 30px; bottom: 100px;'}
-        width: ${config.uiCustomization.floatingIcons.analytics.size};
-        height: ${config.uiCustomization.floatingIcons.analytics.size};
-        background-color: ${config.uiCustomization.floatingIcons.analytics.backgroundColor};
+        width: 60px;
+        height: 60px;
+        background-color: ${currentTheme.secondary};
         border-radius: 50%;
         display: none;
         align-items: center;
@@ -1407,12 +2092,24 @@ function injectConsentHTML(detectedCookies, language = 'en') {
         transform: translateY(0);
     }
 
+    .cookie-admin-button:hover {
+        background-color: #2980b9;
+        transform: translateY(-3px) scale(1.05);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+    }
+
     .cookie-admin-button svg {
         width: 28px;
         height: 28px;
-        fill: ${config.uiCustomization.floatingIcons.analytics.iconColor};
+        fill: white;
+        transition: transform 0.3s ease;
     }
 
+    .cookie-admin-button:hover svg {
+        transform: rotate(15deg);
+    }
+
+    /* Analytics Dashboard */
     .cookie-analytics-modal {
         display: none;
         position: fixed;
@@ -1439,7 +2136,7 @@ function injectConsentHTML(detectedCookies, language = 'en') {
         background-color: ${currentTheme.background};
         margin: 0 auto;
         width: 900px;
-        max-height: 80vh;
+        max-height: 600px;
         border-radius: 12px;
         box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
         overflow: hidden;
@@ -1477,6 +2174,7 @@ function injectConsentHTML(detectedCookies, language = 'en') {
         background: none;
         border: none;
         padding: 0 10px;
+        transition: color 0.2s ease;
     }
 
     .close-analytics-modal:hover {
@@ -1490,6 +2188,7 @@ function injectConsentHTML(detectedCookies, language = 'en') {
         flex: 1;
     }
 
+    /* Password Prompt */
     .password-prompt {
         text-align: center;
         padding: 30px;
@@ -1518,6 +2217,11 @@ function injectConsentHTML(detectedCookies, language = 'en') {
         border-radius: 6px;
         cursor: pointer;
         font-weight: 600;
+        transition: all 0.2s ease;
+    }
+
+    .password-prompt button:hover {
+        background-color: #27ae60;
     }
 
     .error-message {
@@ -1526,36 +2230,16 @@ function injectConsentHTML(detectedCookies, language = 'en') {
         font-size: 14px;
     }
 
+    /* Stats Dashboard */
     .analytics-dashboard {
         font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
     }
 
-    .analytics-controls {
-        margin: 20px 0;
-        display: flex;
-        gap: 10px;
-    }
-
-    .analytics-controls button {
-        padding: 10px 20px;
-        border-radius: 6px;
-        cursor: pointer;
-        font-weight: 600;
-        border: none;
-    }
-
-    #toggleAnalytics {
-        background-color: ${currentTheme.primary};
-        color: white;
-    }
-
-    #toggleAnalytics.active {
-        background-color: ${currentTheme.danger};
-    }
-
-    #clearAnalytics {
-        background-color: ${currentTheme.danger};
-        color: white;
+    .analytics-dashboard h3 {
+        color: ${currentTheme.textDark};
+        margin-top: 0;
+        margin-bottom: 20px;
+        font-size: 1.3rem;
     }
 
     .stats-summary {
@@ -1570,12 +2254,29 @@ function injectConsentHTML(detectedCookies, language = 'en') {
         border-radius: 8px;
         padding: 15px;
         text-align: center;
+        transition: all 0.3s ease;
     }
 
-    .stat-card.accepted { border-top: 4px solid ${currentTheme.primary}; }
-    .stat-card.rejected { border-top: 4px solid ${currentTheme.danger}; }
-    .stat-card.custom { border-top: 4px solid ${currentTheme.secondary}; }
-    .stat-card.total { border-top: 4px solid #9b59b6; }
+    .stat-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+
+    .stat-card.accepted {
+        border-top: 4px solid ${currentTheme.primary};
+    }
+
+    .stat-card.rejected {
+        border-top: 4px solid ${currentTheme.danger};
+    }
+
+    .stat-card.custom {
+        border-top: 4px solid ${currentTheme.secondary};
+    }
+
+    .stat-card.total {
+        border-top: 4px solid #9b59b6;
+    }
 
     .stat-card h4 {
         margin: 0 0 10px 0;
@@ -1599,7 +2300,6 @@ function injectConsentHTML(detectedCookies, language = 'en') {
         display: grid;
         grid-template-columns: 1fr;
         gap: 30px;
-        margin-bottom: 30px;
     }
 
     .time-stat {
@@ -1614,47 +2314,55 @@ function injectConsentHTML(detectedCookies, language = 'en') {
         color: ${currentTheme.textDark};
     }
 
-    .consent-history {
-        margin-top: 30px;
+    .stat-bars {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 10px;
     }
 
-    .consent-history h4 {
-        margin: 0 0 15px 0;
-        font-size: 1.1rem;
-        color: ${currentTheme.textDark};
+    .stat-bar-container {
+        margin-bottom: 15px;
     }
 
-    .history-table-container {
-        max-height: 300px;
-        overflow-y: auto;
-        border: 1px solid #e0e0e0;
-        border-radius: 8px;
+    .stat-bar-label {
+        font-size: 0.85rem;
+        color: ${currentTheme.textLight};
+        margin-bottom: 5px;
     }
 
-    .history-table {
-        width: 100%;
-        border-collapse: collapse;
-        font-size: 13px;
+    .stat-bar {
+        height: 20px;
+        background-color: #ecf0f1;
+        border-radius: 10px;
+        overflow: hidden;
+        display: flex;
     }
 
-    .history-table th {
-        background-color: #f0f0f0;
-        padding: 10px;
-        text-align: left;
-        border-bottom: 2px solid #e0e0e0;
-        position: sticky;
-        top: 0;
+    .stat-bar-segment {
+        height: 100%;
     }
 
-    .history-table td {
-        padding: 10px;
-        border-bottom: 1px solid #e0e0e0;
+    .stat-bar-segment.accepted {
+        background-color: ${currentTheme.primary};
     }
 
-    .history-table tr:last-child td {
-        border-bottom: none;
+    .stat-bar-segment.rejected {
+        background-color: ${currentTheme.danger};
     }
 
+    .stat-bar-segment.custom {
+        background-color: ${currentTheme.secondary};
+    }
+
+    .stat-bar-legend {
+        display: flex;
+        justify-content: space-between;
+        font-size: 0.75rem;
+        color: ${currentTheme.textLight};
+        margin-top: 5px;
+    }
+
+    /* Footer Buttons */
     .cookie-settings-footer {
         padding: 20px 30px;
         background-color: #f8f9fa;
@@ -1664,37 +2372,78 @@ function injectConsentHTML(detectedCookies, language = 'en') {
         border-top: 1px solid #ecf0f1;
     }
 
+    .save-btn {
+        background-color: ${currentTheme.secondary};
+        color: white;
+        background-image: linear-gradient(to right, ${currentTheme.secondary}, #2980b9);
+    }
+
+    .save-btn:hover {
+        background-color: #2980b9;
+        transform: translateY(-2px);
+        box-shadow: 0 5px 10px rgba(0,0,0,0.15);
+    }
+
     /* Responsive Styles */
     @media (max-width: 900px) {
         .cookie-settings-content {
             width: 90%;
             max-height: 80vh;
         }
+        
         .cookie-analytics-content {
             width: 90%;
             max-height: 80vh;
         }
+        
         .stats-summary {
             grid-template-columns: repeat(2, 1fr);
-        }
-        .cookie-consent-banner {
-            width: 90%;
-            ${config.behavior.bannerPosition === 'left' ? 'left: 5%;' : 'right: 5%;'}
         }
     }
 
     @media (max-width: 768px) {
         .cookie-consent-banner {
+            width: 90%;
+            ${config.behavior.floatingButtonPosition === 'left' ? 'left: 5%;' : 'right: 5%;'}
             bottom: 10px;
             padding: 20px;
         }
+        
         .cookie-consent-buttons {
             flex-direction: column;
         }
+        
         .cookie-btn {
             width: 100%;
             margin-bottom: 8px;
         }
+        
+        .cookie-btn:last-child {
+            margin-bottom: 0;
+        }
+        
+        .cookie-settings-header {
+            padding: 15px 20px;
+        }
+        
+        .cookie-settings-body {
+            padding: 15px 20px;
+        }
+        
+        .cookie-settings-footer {
+            flex-direction: column;
+            padding: 15px 20px;
+        }
+        
+        .cookie-settings-footer .cookie-btn {
+            width: 100%;
+            margin-bottom: 8px;
+        }
+        
+        .cookie-settings-footer .cookie-btn:last-child {
+            margin-bottom: 0;
+        }
+        
         .stats-summary {
             grid-template-columns: 1fr;
         }
@@ -1704,24 +2453,67 @@ function injectConsentHTML(detectedCookies, language = 'en') {
         .cookie-consent-banner {
             padding: 15px;
             width: calc(100% - 30px);
-            ${config.behavior.bannerPosition === 'left' ? 'left: 15px;' : 'right: 15px;'}
+            ${config.behavior.floatingButtonPosition === 'left' ? 'left: 15px;' : 'right: 15px;'}
         }
+        
         .cookie-consent-content h2 {
             font-size: 1.1rem;
         }
+        
         .cookie-consent-content p {
             font-size: 0.85rem;
+            margin-bottom: 15px;
         }
+        
+        .privacy-policy-link {
+            margin-bottom: 15px;
+        }
+        
+        .cookie-btn {
+            padding: 10px;
+            font-size: 0.85rem;
+        }
+        
         .cookie-settings-button {
-            width: calc(${config.uiCustomization.floatingIcons.consent.size} * 0.8);
-            height: calc(${config.uiCustomization.floatingIcons.consent.size} * 0.8);
+            width: 50px;
+            height: 50px;
             bottom: 15px;
             ${config.behavior.floatingButtonPosition === 'left' ? 'left: 15px;' : 'right: 15px;'}
         }
+        
         .cookie-admin-button {
-            width: calc(${config.uiCustomization.floatingIcons.analytics.size} * 0.8);
-            height: calc(${config.uiCustomization.floatingIcons.analytics.size} * 0.8);
-            bottom: 80px;
+            width: 50px;
+            height: 50px;
+            ${config.behavior.floatingButtonPosition === 'left' ? 
+              'left: 15px; bottom: 80px;' : 
+              'right: 15px; bottom: 80px;'}
+        }
+        
+        .cookie-settings-button svg {
+            width: 22px;
+            height: 22px;
+        }
+        
+        .cookie-admin-button svg {
+            width: 22px;
+            height: 22px;
+        }
+        
+        .cookie-settings-header h2 {
+            font-size: 1.2rem;
+        }
+        
+        .toggle-container h3 {
+            font-size: 1rem;
+        }
+        
+        .cookie-details-table {
+            font-size: 0.8rem;
+        }
+        
+        .cookie-details-table th, 
+        .cookie-details-table td {
+            padding: 8px 10px;
         }
     }
     </style>`;
@@ -1733,9 +2525,7 @@ function initializeCookieConsent(detectedCookies, language) {
     const consentGiven = getCookie('cookie_consent');
     
     if (!consentGiven && config.behavior.autoShow) {
-        setTimeout(() => {
-            showCookieBanner();
-        }, config.behavior.bannerDelay);
+        showCookieBanner();
     } else if (consentGiven) {
         const consentData = JSON.parse(consentGiven);
         updateConsentMode(consentData);
@@ -1743,17 +2533,25 @@ function initializeCookieConsent(detectedCookies, language) {
         showFloatingButton();
     }
     
+    // Set up event listeners
     setupEventListeners();
     
+    // Setup cookie details toggles
     document.querySelectorAll('.cookie-details-header').forEach(header => {
         header.addEventListener('click', function() {
             const content = this.nextElementSibling;
             const toggle = this.querySelector('.toggle-details');
-            content.style.display = content.style.display === 'none' ? 'block' : 'none';
-            toggle.textContent = content.style.display === 'none' ? '+' : '−';
+            if (content.style.display === 'none') {
+                content.style.display = 'block';
+                toggle.textContent = '−';
+            } else {
+                content.style.display = 'none';
+                toggle.textContent = '+';
+            }
         });
     });
     
+    // Setup language selector change event
     const languageSelect = document.getElementById('cookieLanguageSelect');
     if (languageSelect) {
         languageSelect.addEventListener('change', function() {
@@ -1761,8 +2559,8 @@ function initializeCookieConsent(detectedCookies, language) {
         });
     }
     
-    if (config.analytics.enabled && config.analytics.showDashboard && 
-        config.behavior.analyticsFloatingButtonEnabled) {
+    // Setup admin button if enabled
+    if (config.analytics.enabled && config.analytics.showDashboard) {
         const adminButton = document.getElementById('cookieAdminButton');
         if (adminButton) {
             adminButton.addEventListener('click', showAnalyticsDashboard);
@@ -1773,6 +2571,7 @@ function initializeCookieConsent(detectedCookies, language) {
         }
     }
     
+    // Setup password prompt events if needed
     if (config.analytics.passwordProtect && !isDashboardAuthenticated) {
         setupPasswordPromptEvents();
     }
@@ -1784,46 +2583,18 @@ function setupPasswordPromptEvents() {
         passwordSubmit.addEventListener('click', function() {
             const passwordInput = document.getElementById('dashboardPasswordInput');
             const errorMessage = document.getElementById('passwordError');
-            const lang = document.getElementById('cookieLanguageSelect')?.value || 'en';
             
             if (passwordInput.value === config.analytics.dashboardPassword) {
                 isDashboardAuthenticated = true;
                 setCookie('dashboard_auth', 'true', config.analytics.passwordCookieDuration);
+                
+                // Update the dashboard content
+                const lang = document.getElementById('cookieLanguageSelect') ? 
+                    document.getElementById('cookieLanguageSelect').value : 'en';
                 document.querySelector('.cookie-analytics-body').innerHTML = generateAnalyticsDashboard(lang);
-                setupDashboardControls();
             } else {
                 errorMessage.textContent = translations[lang].passwordIncorrect;
             }
-        });
-    }
-}
-
-function setupDashboardControls() {
-    const toggleAnalytics = document.getElementById('toggleAnalytics');
-    const clearAnalytics = document.getElementById('clearAnalytics');
-    
-    if (toggleAnalytics) {
-        toggleAnalytics.addEventListener('click', function() {
-            config.analytics.enabled = !config.analytics.enabled;
-            this.textContent = `Analytics: ${config.analytics.enabled ? 'ON' : 'OFF'}`;
-            this.classList.toggle('active');
-            saveAnalyticsData();
-        });
-    }
-    
-    if (clearAnalytics) {
-        clearAnalytics.addEventListener('click', function() {
-            consentAnalytics = {
-                total: { accepted: 0, rejected: 0, custom: 0 },
-                daily: {},
-                weekly: {},
-                monthly: {},
-                history: []
-            };
-            const lang = document.getElementById('cookieLanguageSelect')?.value || 'en';
-            document.querySelector('.cookie-analytics-body').innerHTML = generateAnalyticsDashboard(lang);
-            setupDashboardControls();
-            saveAnalyticsData();
         });
     }
 }
@@ -1875,20 +2646,18 @@ function setupEventListeners() {
         hideAnalyticsDashboard();
     });
     
-    const floatingButton = document.getElementById('cookieFloatingButton');
-    if (floatingButton) {
-        floatingButton.addEventListener('click', function() {
-            if (!document.getElementById('cookieConsentBanner').classList.contains('show')) {
-                showCookieSettings();
-            } else {
-                hideCookieBanner();
-            }
-        });
-    }
+    document.getElementById('cookieFloatingButton').addEventListener('click', function() {
+        if (!document.getElementById('cookieConsentBanner').classList.contains('show')) {
+            showCookieBanner();
+        } else {
+            hideCookieBanner();
+        }
+    });
 }
 
 function updateCookieTables(detectedCookies) {
     const categories = ['functional', 'analytics', 'performance', 'advertising', 'uncategorized'];
+    
     categories.forEach(category => {
         const container = document.querySelector(`input[data-category="${category}"]`)?.closest('.cookie-category');
         if (container) {
@@ -1926,63 +2695,136 @@ function generateCookieTable(cookies) {
 }
 
 function showFloatingButton() {
-    if (!config.behavior.floatingButton || !config.behavior.floatingButtonEnabled) return;
+    if (!config.behavior.floatingButton) return;
     
     const button = document.getElementById('cookieFloatingButton');
-    if (button) {
-        button.style.display = 'flex';
-        setTimeout(() => button.classList.add('show'), 100);
-    }
+    button.style.display = 'flex';
+    setTimeout(() => {
+        button.classList.add('show');
+    }, 100);
 }
 
 function hideFloatingButton() {
     const button = document.getElementById('cookieFloatingButton');
-    if (button) {
-        button.classList.remove('show');
-        setTimeout(() => button.style.display = 'none', 300);
-    }
+    button.classList.remove('show');
+    setTimeout(() => {
+        button.style.display = 'none';
+    }, 300);
 }
 
 function showCookieBanner() {
-    if (!config.uiCustomization.banner.enabled) return;
     const banner = document.getElementById('cookieConsentBanner');
     banner.style.display = 'block';
-    setTimeout(() => banner.classList.add('show'), 10);
+    setTimeout(() => {
+        banner.classList.add('show');
+    }, 10);
 }
 
 function hideCookieBanner() {
     const banner = document.getElementById('cookieConsentBanner');
     banner.classList.remove('show');
-    setTimeout(() => banner.style.display = 'none', 300);
+    setTimeout(() => {
+        banner.style.display = 'none';
+    }, 400);
 }
 
 function showCookieSettings() {
     const modal = document.getElementById('cookieSettingsModal');
     modal.style.display = 'flex';
-    setTimeout(() => modal.classList.add('show'), 10);
+    setTimeout(() => {
+        modal.classList.add('show');
+    }, 10);
+    hideCookieBanner();
 }
 
 function hideCookieSettings() {
     const modal = document.getElementById('cookieSettingsModal');
     modal.classList.remove('show');
-    setTimeout(() => modal.style.display = 'none', 300);
+    setTimeout(() => {
+        modal.style.display = 'none';
+    }, 300);
 }
 
 function showAnalyticsDashboard() {
-    const modal = document.getElementById('cookieAnalyticsModal');
-    modal.style.display = 'flex';
-    setTimeout(() => modal.classList.add('show'), 10);
+    if (config.analytics.passwordProtect && !isDashboardAuthenticated) {
+        // Show password prompt if not authenticated
+        const modal = document.getElementById('cookieAnalyticsModal');
+        modal.style.display = 'flex';
+        setTimeout(() => {
+            modal.classList.add('show');
+        }, 10);
+    } else {
+        // Show dashboard if authenticated or no password protection
+        const modal = document.getElementById('cookieAnalyticsModal');
+        const lang = document.getElementById('cookieLanguageSelect') ? 
+            document.getElementById('cookieLanguageSelect').value : 'en';
+        document.querySelector('.cookie-analytics-body').innerHTML = generateAnalyticsDashboard(lang);
+        modal.style.display = 'flex';
+        setTimeout(() => {
+            modal.classList.add('show');
+        }, 10);
+    }
 }
 
 function hideAnalyticsDashboard() {
     const modal = document.getElementById('cookieAnalyticsModal');
     modal.classList.remove('show');
-    setTimeout(() => modal.style.display = 'none', 300);
+    setTimeout(() => {
+        modal.style.display = 'none';
+    }, 300);
+}
+
+function updateConsentMode(consentData) {
+    const consentStates = {
+        'ad_storage': consentData.categories.advertising ? 'granted' : 'denied',
+        'analytics_storage': consentData.categories.analytics ? 'granted' : 'denied',
+        'ad_user_data': consentData.categories.advertising ? 'granted' : 'denied',
+        'ad_personalization': consentData.categories.advertising ? 'granted' : 'denied',
+        'personalization_storage': consentData.categories.performance ? 'granted' : 'denied',
+        'functionality_storage': consentData.categories.functional ? 'granted' : 'denied',
+        'security_storage': 'granted'
+    };
+
+    // Determine GCS signal
+    let gcsSignal = 'G100'; // Default to denied
+    
+    if (consentData.status === 'accepted') {
+        gcsSignal = 'G111';
+    } else if (consentData.status === 'custom') {
+        gcsSignal = 'G101';
+    }
+
+    // Update consent mode immediately
+    gtag('consent', 'update', consentStates);
+    
+    // Push detailed consent data to dataLayer
+    window.dataLayer.push({
+        'event': 'cookie_consent_update',
+        'consent_mode': consentStates,
+        'gcs': gcsSignal,
+        'consent_status': consentData.status,
+        'consent_categories': consentData.categories,
+        'timestamp': new Date().toISOString(),
+        'consent_version': '4.0',
+        'consent_scope': 'global',
+        'debug_info': {
+            'cookies_found': scanAndCategorizeCookies(),
+            'user_agent': navigator.userAgent,
+            'language': navigator.language
+        }
+    });
+
+    console.log('Consent Mode Updated:', {
+        states: consentStates,
+        gcsSignal: gcsSignal,
+        categories: consentData.categories
+    });
 }
 
 function acceptAllCookies() {
     const consentData = {
         status: 'accepted',
+        gcs: 'G111',
         categories: {
             functional: true,
             analytics: true,
@@ -1990,258 +2832,166 @@ function acceptAllCookies() {
             advertising: true,
             uncategorized: true
         },
-        timestamp: new Date().toISOString()
+        timestamp: new Date().getTime()
     };
     
     setCookie('cookie_consent', JSON.stringify(consentData), 365);
     updateConsentMode(consentData);
     loadCookiesAccordingToConsent(consentData);
     
+    // Update analytics
     if (config.analytics.enabled) {
-        updateConsentStats('accepted', consentData);
+        updateConsentStats('accepted');
     }
-    
-    window.dataLayer.push({
-        'event': 'cookie_consent',
-        'consent_status': 'accepted'
-    });
 }
 
 function rejectAllCookies() {
     const consentData = {
         status: 'rejected',
+        gcs: 'G100',
         categories: {
-            functional: true,
+            functional: true,  // Essential cookies always enabled
             analytics: false,
             performance: false,
             advertising: false,
             uncategorized: false
         },
-        timestamp: new Date().toISOString()
+        timestamp: new Date().getTime()
     };
     
     setCookie('cookie_consent', JSON.stringify(consentData), 365);
     updateConsentMode(consentData);
-    loadCookiesAccordingToConsent(consentData);
+    clearNonEssentialCookies();
     
+    // Update analytics
     if (config.analytics.enabled) {
-        updateConsentStats('rejected', consentData);
+        updateConsentStats('rejected');
     }
-    
-    window.dataLayer.push({
-        'event': 'cookie_consent',
-        'consent_status': 'rejected'
+}
+
+function clearNonEssentialCookies() {
+    const cookies = document.cookie.split(';');
+    cookies.forEach(cookie => {
+        const [nameValue] = cookie.trim().split('=');
+        const name = nameValue.trim();
+        let isEssential = false;
+        
+        // Check if cookie is essential
+        for (const pattern in cookieDatabase) {
+            if (name.startsWith(pattern) && cookieDatabase[pattern].category === 'functional') {
+                isEssential = true;
+                break;
+            }
+        }
+        
+        if (!isEssential && name && name !== 'cookie_consent') {
+            // Clear the cookie
+            document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/; domain=${window.location.hostname}`;
+        }
     });
 }
 
 function saveCustomSettings() {
     const consentData = {
         status: 'custom',
+        gcs: 'G101',
         categories: {
-            functional: true,
+            functional: true,  // Essential cookies always enabled
             analytics: document.querySelector('input[data-category="analytics"]').checked,
             performance: document.querySelector('input[data-category="performance"]').checked,
             advertising: document.querySelector('input[data-category="advertising"]').checked,
-            uncategorized: document.querySelector('input[data-category="uncategorized"]').checked
+            uncategorized: document.querySelector('input[data-category="uncategorized"]') ? 
+                document.querySelector('input[data-category="uncategorized"]').checked : false
         },
-        timestamp: new Date().toISOString()
+        timestamp: new Date().getTime()
     };
     
     setCookie('cookie_consent', JSON.stringify(consentData), 365);
     updateConsentMode(consentData);
     loadCookiesAccordingToConsent(consentData);
     
-    if (config.analytics.enabled) {
-        updateConsentStats('custom', consentData);
-    }
+    // Clear cookies if categories were disabled
+    if (!consentData.categories.analytics) clearCategoryCookies('analytics');
+    if (!consentData.categories.performance) clearCategoryCookies('performance');
+    if (!consentData.categories.advertising) clearCategoryCookies('advertising');
+    if (!consentData.categories.uncategorized) clearCategoryCookies('uncategorized');
     
-    window.dataLayer.push({
-        'event': 'cookie_consent',
-        'consent_status': 'custom',
-        'consent_categories': consentData.categories
-    });
+    // Update analytics
+    if (config.analytics.enabled) {
+        updateConsentStats('custom');
+    }
 }
 
-function updateConsentMode(consentData) {
-    const consentMap = {
-        'functional': 'functionality_storage',
-        'analytics': 'analytics_storage',
-        'performance': 'performance_storage',
-        'advertising': 'ad_storage',
-        'uncategorized': 'personalization_storage'
-    };
-    
-    const consentUpdate = {
-        'ad_user_data': consentData.categories.advertising ? 'granted' : 'denied',
-        'ad_personalization': consentData.categories.advertising ? 'granted' : 'denied',
-        'security_storage': 'granted'
-    };
-    
-    for (const [category, storageType] of Object.entries(consentMap)) {
-        consentUpdate[storageType] = consentData.categories[category] ? 'granted' : 'denied';
-    }
-    
-    gtag('consent', 'update', consentUpdate);
+function clearCategoryCookies(category) {
+    const cookies = scanAndCategorizeCookies()[category];
+    cookies.forEach(cookie => {
+        document.cookie = `${cookie.name}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/; domain=${window.location.hostname}`;
+    });
 }
 
 function loadCookiesAccordingToConsent(consentData) {
-    const categories = ['analytics', 'performance', 'advertising', 'uncategorized'];
-    
-    categories.forEach(category => {
-        if (!consentData.categories[category]) {
-            const cookies = scanAndCategorizeCookies()[category];
-            cookies.forEach(cookie => {
-                deleteCookie(cookie.name);
-            });
-        }
-    });
-    
     if (consentData.categories.analytics) {
-        loadAnalyticsScripts();
+        loadAnalyticsCookies();
     }
     
     if (consentData.categories.advertising) {
-        loadAdvertisingScripts();
+        loadAdvertisingCookies();
+    }
+    
+    if (consentData.categories.performance) {
+        loadPerformanceCookies();
     }
 }
 
-function loadAnalyticsScripts() {
-    if (window.ga && window.ga.loaded) return;
-    
-    const script = document.createElement('script');
-    script.async = true;
-    script.src = 'https://www.googletagmanager.com/gtag/js?id=UA-XXXXX-Y';
-    document.head.appendChild(script);
-    
-    window.dataLayer.push({
-        'event': 'analytics_enabled'
-    });
+function loadAnalyticsCookies() {
+    console.log('Loading analytics cookies');
+    // Implement your analytics tracking here
+    if (typeof ga === 'undefined' && typeof gtag === 'function') {
+        gtag('js', new Date());
+        gtag('config', 'YOUR_GA4_MEASUREMENT_ID');
+    }
 }
 
-function loadAdvertisingScripts() {
-    if (window.adsbygoogle) return;
-    
-    const script = document.createElement('script');
-    script.async = true;
-    script.src = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js';
-    document.head.appendChild(script);
-    
-    window.dataLayer.push({
-        'event': 'advertising_enabled'
-    });
+function loadAdvertisingCookies() {
+    console.log('Loading advertising cookies');
+    // Implement your advertising tracking here
+    if (typeof fbq === 'undefined') {
+        !function(f,b,e,v,n,t,s)
+        {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+        n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+        if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+        n.queue=[];t=b.createElement(e);t.async=!0;
+        t.src=v;s=b.getElementsByTagName(e)[0];
+        s.parentNode.insertBefore(t,s)}(window, document,'script',
+        'https://connect.facebook.net/en_US/fbevents.js');
+        fbq('init', 'YOUR_PIXEL_ID');
+        fbq('track', 'PageView');
+    }
+}
+
+function loadPerformanceCookies() {
+    console.log('Loading performance cookies');
+    // Implement performance tracking here
 }
 
 function setCookie(name, value, days) {
-    let expires = '';
+    let expires = "";
     if (days) {
         const date = new Date();
-        if (days === -1) {
-            date.setTime(date.getTime() + (1000 * 365 * 24 * 60 * 60 * 1000));
-        } else {
-            date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
-        }
-        expires = '; expires=' + date.toUTCString();
+        date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+        expires = "; expires=" + date.toUTCString();
     }
-    document.cookie = name + '=' + (value || '') + expires + '; path=/; SameSite=Strict';
+    document.cookie = name + "=" + (value || "") + expires + "; path=/; SameSite=Lax; Secure";
 }
 
 function getCookie(name) {
-    const nameEQ = name + '=';
+    const nameEQ = name + "=";
     const ca = document.cookie.split(';');
     for (let i = 0; i < ca.length; i++) {
         let c = ca[i];
-        while (c.charAt(0) === ' ') {
-            c = c.substring(1, c.length);
-        }
-        if (c.indexOf(nameEQ) === 0) {
-            return c.substring(nameEQ.length, c.length);
-        }
+        while (c.charAt(0) === ' ') c = c.substring(1, c.length);
+        if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
     }
     return null;
 }
-
-function deleteCookie(name) {
-    document.cookie = name + '=; Max-Age=-99999999; path=/;';
-}
-
-function resetConsentSystem() {
-    deleteCookie('cookie_consent');
-    deleteCookie('preferred_language');
-    deleteCookie('dashboard_auth');
-    localStorage.removeItem('consentAnalytics');
-    
-    consentAnalytics = {
-        total: { accepted: 0, rejected: 0, custom: 0 },
-        daily: {},
-        weekly: {},
-        monthly: {},
-        history: []
-    };
-    
-    isDashboardAuthenticated = false;
-    const today = new Date().toISOString().split('T')[0];
-    consentAnalytics.daily[today] = { accepted: 0, rejected: 0, custom: 0 };
-    
-    gtag('consent', 'default', {
-        'ad_storage': 'denied',
-        'analytics_storage': 'denied',
-        'ad_user_data': 'denied',
-        'ad_personalization': 'denied',
-        'personalization_storage': 'denied',
-        'functionality_storage': 'denied',
-        'security_storage': 'granted'
-    });
-    
-    window.location.reload();
-}
-
-function logToExternalSystem(event, data) {
-    console.log(`External Log - ${event}:`, data);
-    window.dataLayer.push({
-        'event': event,
-        ...data
-    });
-}
-
-function cleanupOldData() {
-    const cutoffDate = new Date();
-    cutoffDate.setDate(cutoffDate.getDate() - config.analytics.storageDays);
-    
-    for (const date in consentAnalytics.daily) {
-        if (new Date(date) < cutoffDate) {
-            delete consentAnalytics.daily[date];
-        }
-    }
-    
-    for (const week in consentAnalytics.weekly) {
-        const [year, weekNum] = week.split('-W');
-        const weekDate = new Date(year, 0, 1);
-        weekDate.setDate(weekDate.getDate() + (weekNum - 1) * 7);
-        if (weekDate < cutoffDate) {
-            delete consentAnalytics.weekly[week];
-        }
-    }
-    
-    for (const month in consentAnalytics.monthly) {
-        const [year, monthNum] = month.split('-');
-        const monthDate = new Date(year, monthNum - 1, 1);
-        if (monthDate < cutoffDate) {
-            delete consentAnalytics.monthly[month];
-        }
-    }
-    
-    saveAnalyticsData();
-}
-
-setInterval(cleanupOldData, 24 * 60 * 60 * 1000);
-
-window.addEventListener('beforeunload', () => {
-    logToExternalSystem('session_end', {
-        consent_status: getCookie('cookie_consent') || 'not_set',
-        session_duration: (Date.now() - window.performance.timing.navigationStart) / 1000
-    });
-});
-
-console.log('Cookie Consent System v4.2 Initialized');
-
 
