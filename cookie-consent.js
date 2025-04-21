@@ -54,12 +54,12 @@ const config = {
         passwordCookieDuration: 365 // Days to remember password
     },
     
-    // Banner behavior
 // Banner behavior
 behavior: {
     autoShow: true, // Automatically show banner on page load
     bannerDelay: 0, // Seconds before showing banner (0, 5, 10, or any number)
     floatingButton: true, // Show floating settings button
+    showAnalyticsFloatingButton: false, // Show or hide the floating analytics dashboard icon (true/false)
     rememberLanguage: true, // Remember user's language preference
     acceptOnScroll: false, // Accept cookies when user scrolls
     acceptOnContinue: true, // Implicit consent when continuing to browse
@@ -67,7 +67,6 @@ behavior: {
     adminButtonPosition: 'left', // 'left' or 'right' for admin dashboard button
     bannerPosition: 'right' // 'left' or 'right' for banner
 },
-
 
     // UI Theme (can be 'default' or 'classic')
     uiTheme: 'default'
@@ -2686,8 +2685,8 @@ function generateCookieTable(cookies) {
 }
 
 function showFloatingButton() {
-    if (!config.behavior.floatingButton) return;
-    
+    if (!config.behavior.floatingButton || !config.behavior.showAnalyticsFloatingButton) return;
+
     const button = document.getElementById('cookieFloatingButton');
     button.style.display = 'flex';
     setTimeout(() => {
