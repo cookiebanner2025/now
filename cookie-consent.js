@@ -1,5 +1,5 @@
 /**
- * Ultimate GDPR Cookie Consent Solution  - Advanced Edition
+ * Ultimate GDPR Cookie Consent Solution v4.2 - Advanced Edition
  * - Automatic translation based on user's country
  * - Domain restriction controls
  * - Geo-targeting (country/city/state level controls)
@@ -7,6 +7,10 @@
  * - Built-in analytics dashboard with password protection
  * - Consent Mode v2 and future-proof compliance
  * - Premium UI with enhanced UX
+ * - Flexible banner positioning
+ * - Detailed consent history
+ * - Configurable banner delay
+ * - Floating icon position control
  */
 
 // ============== CONFIGURATION SECTION ============== //
@@ -16,69 +20,54 @@ const config = {
     
     // Language configuration
     languageConfig: {
-        defaultLanguage: 'en', // Default language if auto-detection fails
-        availableLanguages: ['en', 'fr', 'de'], // Only 3 languages as requested
-        showLanguageSelector: true, // Show/hide language dropdown
-        autoDetectLanguage: true // Auto-detect language based on country/browser
+        defaultLanguage: 'en',
+        availableLanguages: ['en', 'fr', 'de'], // Limited to three languages
+        showLanguageSelector: true,
+        autoDetectLanguage: true
     },
     
     // Geo-targeting configuration
     geoConfig: {
-        // Only show in these countries (empty array = all countries)
         allowedCountries: [],
-        
-        // Only show in these regions/states (empty array = all regions)
         allowedRegions: [],
-        
-        // Only show in these cities (empty array = all cities)
         allowedCities: [],
-        
-        // Countries where banner should be hidden
         blockedCountries: [],
-        
-        // Regions where banner should be hidden
         blockedRegions: [],
-        
-        // Cities where banner should be hidden
         blockedCities: []
     },
     
     // Analytics configuration
     analytics: {
         enabled: true,
-        storageDays: 30, // How long to keep analytics data
-        showDashboard: true, // Show analytics dashboard button
-        passwordProtect: true, // Enable password protection
-        dashboardPassword: 'admin123', // Default password (should be changed per site)
-        passwordCookieDuration: 365, // Days to remember password
-        passwordNeverExpire: false // Password doesn't expire once set
+        storageDays: 30,
+        showDashboard: true,
+        passwordProtect: true,
+        dashboardPassword: 'admin123',
+        passwordCookieDuration: -1 // -1 means never expires
     },
     
     // Banner behavior
     behavior: {
-        autoShow: true, // Automatically show banner on page load
-        floatingButton: true, // Show floating settings button
-        rememberLanguage: true, // Remember user's language preference
-        acceptOnScroll: false, // Accept cookies when user scrolls
-        acceptOnContinue: true, // Implicit consent when continuing to browse
+        autoShow: true,
+        floatingButton: true,
         floatingButtonPosition: 'left', // 'left' or 'right'
-        bannerPosition: 'bottom-left', // 'bottom-left', 'bottom-right', 'center'
-        bannerDelay: 0, // Delay in seconds before showing banner (0 = no delay)
         adminButtonPosition: 'left', // 'left' or 'right'
-        showAdminButton: true, // Show admin dashboard button
-        showFloatingButton: true // Show cookie settings floating button
+        rememberLanguage: true,
+        acceptOnScroll: false,
+        acceptOnContinue: true,
+        bannerPosition: 'middle', // 'left', 'right', 'middle'
+        bannerDelay: 5000 // Delay in milliseconds (5 seconds default)
     },
 
-    // UI Theme (can be 'default' or 'classic')
+    // UI Theme
     uiTheme: 'default'
 };
 
 // ============== MAIN IMPLEMENTATION ============== //
-// Initialize dataLayer for Google Tag Manager
 window.dataLayer = window.dataLayer || [];
 function gtag() { dataLayer.push(arguments); }
 
-// Set default consent (deny all except security)
+// Set default consent
 gtag('consent', 'default', {
     'ad_storage': 'denied',
     'analytics_storage': 'denied',
@@ -89,64 +78,52 @@ gtag('consent', 'default', {
     'security_storage': 'granted'
 });
 
-// Color scheme - easily customizable
+// Color schemes
 const colorScheme = {
-    primary: '#2ecc71',      // Green (accept button color)
-    secondary: '#3498db',    // Blue (save button color)
-    danger: '#e74c3c',       // Red (reject button color)
-    textDark: '#2c3e50',     // Dark text
-    textLight: '#7f8c8d',    // Light text
-    background: '#ffffff',   // White background
-    toggleActive: '#2ecc71', // Same as primary
-    toggleInactive: '#bdc3c7'// Gray for inactive
+    primary: '#2ecc71',
+    secondary: '#3498db',
+    danger: '#e74c3c',
+    textDark: '#2c3e50',
+    textLight: '#7f8c8d',
+    background: '#ffffff',
+    toggleActive: '#2ecc71',
+    toggleInactive: '#bdc3c7'
 };
 
-// Classic theme color scheme
 const classicColorScheme = {
-    primary: '#4CAF50',      // Green (accept button color)
-    secondary: '#2196F3',    // Blue (save button color)
-    danger: '#f44336',       // Red (reject button color)
-    textDark: '#212121',     // Dark text
-    textLight: '#757575',    // Light text
-    background: '#ffffff',   // White background
-    toggleActive: '#4CAF50', // Same as primary
-    toggleInactive: '#9E9E9E'// Gray for inactive
+    primary: '#4CAF50',
+    secondary: '#2196F3',
+    danger: '#f44336',
+    textDark: '#212121',
+    textLight: '#757575',
+    background: '#ffffff',
+    toggleActive: '#4CAF50',
+    toggleInactive: '#9E9E9E'
 };
 
-// Enhanced cookie database with detailed descriptions
+// Cookie database
 const cookieDatabase = {
-    // Google Analytics/GA4
     '_ga': { category: 'analytics', duration: '2 years', description: 'Google Analytics user distinction' },
     '_gid': { category: 'analytics', duration: '24 hours', description: 'Google Analytics user distinction' },
     '_gat': { category: 'analytics', duration: '1 minute', description: 'Google Analytics throttle rate' },
     '_ga_': { category: 'analytics', duration: '2 years', description: 'GA4 session state' },
-    
-    // Facebook Pixel
     '_fbp': { category: 'advertising', duration: '3 months', description: 'Facebook conversion tracking' },
     'fr': { category: 'advertising', duration: '3 months', description: 'Facebook targeted ads' },
-    
-    // Functional cookies
     'wordpress_': { category: 'functional', duration: 'Session', description: 'WordPress authentication' },
     'wp-settings': { category: 'functional', duration: '1 year', description: 'WordPress preferences' },
     'PHPSESSID': { category: 'functional', duration: 'Session', description: 'PHP session' },
     'cookie_consent': { category: 'functional', duration: '1 year', description: 'Stores cookie consent preferences' },
-    
-    // WooCommerce cookies
     'woocommerce_items_in_cart': { category: 'functional', duration: 'Session', description: 'WooCommerce cart items tracking' },
     'woocommerce_cart_hash': { category: 'functional', duration: 'Session', description: 'WooCommerce cart hash' },
-    
-    // Advertising cookies
     '_gcl_au': { category: 'advertising', duration: '3 months', description: 'Google Ads conversion' },
     'IDE': { category: 'advertising', duration: '1 year', description: 'Google DoubleClick' },
     'NID': { category: 'advertising', duration: '6 months', description: 'Google user tracking' },
-    
-    // Other common cookies
     'gclid_tracker': { category: 'advertising', duration: 'Session', description: 'Tracks Google Click ID for conversions' },
     'tk_ai': { category: 'analytics', duration: 'Session', description: 'Jetpack/Tumblr analytics' },
     'external_id': { category: 'functional', duration: 'Session', description: 'External service identifier' }
 };
 
-// Language translations (only 3 languages as requested)
+// Language translations (limited to en, fr, de for brevity)
 const translations = {
     en: {
         title: "We value your privacy",
@@ -178,7 +155,8 @@ const translations = {
         passwordPrompt: "Enter password to view analytics",
         passwordSubmit: "Submit",
         passwordIncorrect: "Incorrect password",
-        dashboardTitle: "Consent Analytics Dashboard"
+        dashboardTitle: "Consent Analytics Dashboard",
+        historyTitle: "Consent Change History"
     },
     fr: {
         title: "Nous respectons votre vie privée",
@@ -210,7 +188,8 @@ const translations = {
         passwordPrompt: "Entrez le mot de passe pour voir les analyses",
         passwordSubmit: "Soumettre",
         passwordIncorrect: "Mot de passe incorrect",
-        dashboardTitle: "Tableau de bord des analyses de consentement"
+        dashboardTitle: "Tableau de bord des analyses de consentement",
+        historyTitle: "Historique des changements de consentement"
     },
     de: {
         title: "Wir schätzen Ihre Privatsphäre",
@@ -242,122 +221,69 @@ const translations = {
         passwordPrompt: "Passwort eingeben, um Analysen anzuzeigen",
         passwordSubmit: "Einreichen",
         passwordIncorrect: "Falsches Passwort",
-        dashboardTitle: "Zustimmungsanalyse-Dashboard"
+        dashboardTitle: "Zustimmungs-Analyse-Dashboard",
+        historyTitle: "Verlauf der Zustimmungsänderungen"
     }
 };
 
-// Country to language mapping for auto-translation
+// Country to language mapping
 const countryLanguageMap = {
-    // EU Countries
-    'AT': 'de',     // Austria
-    'BE': 'nl',     // Belgium (Dutch)
-    'BE': 'fr',     // Belgium (French)
-    'BG': 'bg',     // Bulgaria
-    'HR': 'hr',     // Croatia
-    'CY': 'el',     // Cyprus
-    'CZ': 'cs',     // Czech Republic
-    'DK': 'da',     // Denmark
-    'EE': 'et',     // Estonia
-    'FI': 'fi',     // Finland
-    'FR': 'fr',     // France
-    'DE': 'de',     // Germany
-    'GR': 'el',     // Greece
-    'HU': 'hu',     // Hungary
-    'IE': 'en',     // Ireland
-    'IT': 'it',     // Italy
-    'LV': 'lv',     // Latvia
-    'LT': 'lt',     // Lithuania
-    'LU': 'fr',     // Luxembourg
-    'LU': 'de',     // Luxembourg
-    'MT': 'mt',     // Malta
-    'NL': 'nl',     // Netherlands
-    'PL': 'pl',     // Poland
-    'PT': 'pt',     // Portugal
-    'RO': 'ro',     // Romania
-    'SK': 'sk',     // Slovakia
-    'SI': 'sl',     // Slovenia
-    'ES': 'es',     // Spain
-    'SE': 'sv',     // Sweden
-    
-    // Other European countries
-    'AL': 'en',     // Albania
-    'BA': 'en',     // Bosnia and Herzegovina
-    'IS': 'en',     // Iceland
-    'LI': 'de',     // Liechtenstein
-    'MK': 'en',     // North Macedonia
-    'NO': 'en',     // Norway
-    'RS': 'en',     // Serbia
-    'CH': 'de',     // Switzerland
-    'CH': 'fr',     // Switzerland
-    'CH': 'it',     // Switzerland
-    'UA': 'uk',     // Ukraine
-    'GB': 'en',     // United Kingdom
-    
-    // Rest of the world
-    'US': 'en',     // United States
-    'CA': 'en',     // Canada
-    'CA': 'fr',     // Canada (French)
-    'AU': 'en',     // Australia
-    'NZ': 'en',     // New Zealand
-    'ZA': 'en',     // South Africa
-    'IN': 'en',     // India
-    'CN': 'zh',     // China
-    'JP': 'ja',     // Japan
-    'KR': 'ko',     // South Korea
-    'BR': 'pt',     // Brazil
-    'MX': 'es',     // Mexico
-    'AR': 'es',     // Argentina
-    'RU': 'ru'      // Russia
+    'AT': 'de', 'BE': ['nl', 'fr'], 'BG': 'bg', 'HR': 'hr', 'CY': 'el', 'CZ': 'cs', 'DK': 'da',
+    'EE': 'et', 'FI': 'fi', 'FR': 'fr', 'DE': 'de', 'GR': 'el', 'HU': 'hu', 'IE': 'en', 'IT': 'it',
+    'LV': 'lv', 'LT': 'lt', 'LU': ['fr', 'de'], 'MT': 'mt', 'NL': 'nl', 'PL': 'pl', 'PT': 'pt',
+    'RO': 'ro', 'SK': 'sk', 'SI': 'sl', 'ES': 'es', 'SE': 'sv', 'AL': 'en', 'BA': 'en', 'IS': 'en',
+    'LI': 'de', 'MK': 'en', 'NO': 'en', 'RS': 'en', 'CH': ['de', 'fr', 'it'], 'UA': 'uk', 'GB': 'en',
+    'US': 'en', 'CA': ['en', 'fr'], 'AU': 'en', 'NZ': 'en', 'ZA': 'en', 'IN': 'en', 'CN': 'zh',
+    'JP': 'ja', 'KR': 'ko', 'BR': 'pt', 'MX': 'es', 'AR': 'es', 'RU': 'ru'
 };
 
-// Analytics data storage
+// Analytics and history storage
 let consentAnalytics = {
-    total: {
-        accepted: 0,
-        rejected: 0,
-        custom: 0
-    },
+    total: { accepted: 0, rejected: 0, custom: 0 },
     daily: {},
     weekly: {},
     monthly: {}
 };
 
-// Password protection for analytics
+let consentHistory = []; // Store detailed consent changes
 let isDashboardAuthenticated = false;
 
-// Load analytics data from localStorage
+// Load analytics and history data
 function loadAnalyticsData() {
-    const savedData = localStorage.getItem('consentAnalytics');
-    if (savedData) {
-        consentAnalytics = JSON.parse(savedData);
-    }
+    const savedAnalytics = localStorage.getItem('consentAnalytics');
+    if (savedAnalytics) consentAnalytics = JSON.parse(savedAnalytics);
     
-    // Initialize today's data if not exists
+    const savedHistory = localStorage.getItem('consentHistory');
+    if (savedHistory) consentHistory = JSON.parse(savedHistory);
+    
     const today = new Date().toISOString().split('T')[0];
     if (!consentAnalytics.daily[today]) {
-        consentAnalytics.daily[today] = {
-            accepted: 0,
-            rejected: 0,
-            custom: 0
-        };
+        consentAnalytics.daily[today] = { accepted: 0, rejected: 0, custom: 0 };
     }
     
-    // Check if dashboard is authenticated
-    if (config.analytics.passwordProtect) {
-        isDashboardAuthenticated = getCookie('dashboard_auth') === 'true';
-    } else {
-        isDashboardAuthenticated = true;
-    }
+    isDashboardAuthenticated = config.analytics.passwordProtect ? 
+        getCookie('dashboard_auth') === 'true' : true;
 }
 
-// Save analytics data to localStorage
+// Save analytics and history
 function saveAnalyticsData() {
     localStorage.setItem('consentAnalytics', JSON.stringify(consentAnalytics));
+    localStorage.setItem('consentHistory', JSON.stringify(consentHistory));
+    
+    // Clean up old data
+    const now = new Date();
+    const cutoff = now.getTime() - (config.analytics.storageDays * 24 * 60 * 60 * 1000);
+    Object.keys(consentAnalytics.daily).forEach(date => {
+        if (new Date(date).getTime() < cutoff) {
+            delete consentAnalytics.daily[date];
+        }
+    });
 }
 
-// Update analytics data
-function updateConsentStats(status) {
+// Update analytics and history
+function updateConsentStats(status, consentData) {
     const today = new Date().toISOString().split('T')[0];
+    const timestamp = new Date().toISOString();
     
     // Update totals
     if (status === 'accepted') {
@@ -371,90 +297,73 @@ function updateConsentStats(status) {
         consentAnalytics.daily[today].custom++;
     }
     
-    // Update weekly and monthly stats
-    updateTimeBasedStats(today, status);
+    // Record consent history
+    consentHistory.push({
+        timestamp,
+        status,
+        categories: consentData.categories,
+        userAgent: navigator.userAgent,
+        language: document.getElementById('cookieLanguageSelect')?.value || 'en'
+    });
     
+    updateTimeBasedStats(today, status);
     saveAnalyticsData();
 }
 
 // Update weekly and monthly stats
-function updateTimeBasedStats(date, status) {
-    const dateObj = new Date(date);
-    const year = dateObj.getFullYear();
-    const month = dateObj.getMonth() + 1;
-    const week = getWeekNumber(dateObj);
+function updateTimeBasedStats(today, status) {
+    const date = new Date(today);
+    const week = `${date.getFullYear()}-W${Math.floor((date.getDate() - date.getDay() + 7) / 7)}`;
+    const month = `${date.getFullYear()}-${date.getMonth() + 1}`;
     
-    // Weekly stats
-    const weekKey = `${year}-W${week}`;
-    if (!consentAnalytics.weekly[weekKey]) {
-        consentAnalytics.weekly[weekKey] = {
-            accepted: 0,
-            rejected: 0,
-            custom: 0
-        };
+    // Initialize weekly and monthly stats if not present
+    if (!consentAnalytics.weekly[week]) {
+        consentAnalytics.weekly[week] = { accepted: 0, rejected: 0, custom: 0 };
+    }
+    if (!consentAnalytics.monthly[month]) {
+        consentAnalytics.monthly[month] = { accepted: 0, rejected: 0, custom: 0 };
     }
     
-    // Monthly stats
-    const monthKey = `${year}-${month}`;
-    if (!consentAnalytics.monthly[monthKey]) {
-        consentAnalytics.monthly[monthKey] = {
-            accepted: 0,
-            rejected: 0,
-            custom: 0
-        };
-    }
-    
-    // Update counts
+    // Update weekly and monthly stats
     if (status === 'accepted') {
-        consentAnalytics.weekly[weekKey].accepted++;
-        consentAnalytics.monthly[monthKey].accepted++;
+        consentAnalytics.weekly[week].accepted++;
+        consentAnalytics.monthly[month].accepted++;
     } else if (status === 'rejected') {
-        consentAnalytics.weekly[weekKey].rejected++;
-        consentAnalytics.monthly[monthKey].rejected++;
+        consentAnalytics.weekly[week].rejected++;
+        consentAnalytics.monthly[month].rejected++;
     } else if (status === 'custom') {
-        consentAnalytics.weekly[weekKey].custom++;
-        consentAnalytics.monthly[monthKey].custom++;
+        consentAnalytics.weekly[week].custom++;
+        consentAnalytics.monthly[month].custom++;
     }
 }
 
-// Helper function to get week number
-function getWeekNumber(date) {
-    const d = new Date(date);
-    d.setHours(0, 0, 0, 0);
-    d.setDate(d.getDate() + 3 - (d.getDay() + 6) % 7);
-    const week1 = new Date(d.getFullYear(), 0, 4);
-    return 1 + Math.round(((d - week1) / 86400000 - 3 + (week1.getDay() + 6) % 7) / 7);
-}
-
-// Generate analytics dashboard HTML
+// Generate analytics dashboard with charts
 function generateAnalyticsDashboard(language = 'en') {
     const lang = translations[language] || translations.en;
     
     // Calculate totals
-    const total = consentAnalytics.total.accepted + 
-                 consentAnalytics.total.rejected + 
-                 consentAnalytics.total.custom;
-    
+    const total = consentAnalytics.total.accepted + consentAnalytics.total.rejected + consentAnalytics.total.custom;
     const acceptedPercent = total > 0 ? Math.round((consentAnalytics.total.accepted / total) * 100) : 0;
     const rejectedPercent = total > 0 ? Math.round((consentAnalytics.total.rejected / total) * 100) : 0;
     const customPercent = total > 0 ? Math.round((consentAnalytics.total.custom / total) * 100) : 0;
     
     // Get last 7 days data
     const last7Days = {};
-    const dates = Object.keys(consentAnalytics.daily).sort().reverse().slice(0, 7);
-    dates.forEach(date => {
-        last7Days[date] = consentAnalytics.daily[date];
-    });
+    const dates7 = Object.keys(consentAnalytics.daily).sort().reverse().slice(0, 7);
+    dates7.forEach(date => last7Days[date] = consentAnalytics.daily[date]);
     
     // Get last 30 days data
     const last30Days = {};
-    const monthlyDates = Object.keys(consentAnalytics.daily).sort().reverse().slice(0, 30);
-    monthlyDates.forEach(date => {
-        last30Days[date] = consentAnalytics.daily[date];
-    });
+    const dates30 = Object.keys(consentAnalytics.daily).sort().reverse().slice(0, 30);
+    dates30.forEach(date => last30Days[date] = consentAnalytics.daily[date]);
     
     return `
     <div class="analytics-dashboard">
+        <div class="dashboard-controls">
+            <label><input type="checkbox" id="analyticsToggle" ${config.analytics.enabled ? 'checked' : ''}> Enable Analytics</label>
+            <label><input type="checkbox" id="adminButtonToggle" ${config.behavior.showDashboard ? 'checked' : ''}> Show Admin Button</label>
+        </div>
+        
         <h3>${lang.dashboardTitle}</h3>
         
         <div class="stats-summary">
@@ -463,19 +372,16 @@ function generateAnalyticsDashboard(language = 'en') {
                 <div class="stat-value">${consentAnalytics.total.accepted}</div>
                 <div class="stat-percentage">${acceptedPercent}%</div>
             </div>
-            
             <div class="stat-card rejected">
                 <h4>${lang.statsRejected}</h4>
                 <div class="stat-value">${consentAnalytics.total.rejected}</div>
                 <div class="stat-percentage">${rejectedPercent}%</div>
             </div>
-            
             <div class="stat-card custom">
                 <h4>${lang.statsCustom}</h4>
                 <div class="stat-value">${consentAnalytics.total.custom}</div>
                 <div class="stat-percentage">${customPercent}%</div>
             </div>
-            
             <div class="stat-card total">
                 <h4>${lang.statsTotal}</h4>
                 <div class="stat-value">${total}</div>
@@ -483,68 +389,143 @@ function generateAnalyticsDashboard(language = 'en') {
             </div>
         </div>
         
-        <div class="time-based-stats">
-            <div class="time-stat">
+        <div class="charts-container">
+            <div class="chart-section">
                 <h4>${lang.statsLast7Days}</h4>
-                <div class="stat-bars">
-                    ${Object.entries(last7Days).map(([date, data]) => {
-                        const dayTotal = data.accepted + data.rejected + data.custom;
-                        const dayAcceptedPercent = dayTotal > 0 ? (data.accepted / dayTotal) * 100 : 0;
-                        const dayRejectedPercent = dayTotal > 0 ? (data.rejected / dayTotal) * 100 : 0;
-                        const dayCustomPercent = dayTotal > 0 ? (data.custom / dayTotal) * 100 : 0;
-                        
-                        return `
-                        <div class="stat-bar-container">
-                            <div class="stat-bar-label">${date}</div>
-                            <div class="stat-bar">
-                                <div class="stat-bar-segment accepted" style="width: ${dayAcceptedPercent}%"></div>
-                                <div class="stat-bar-segment custom" style="width: ${dayCustomPercent}%"></div>
-                                <div class="stat-bar-segment rejected" style="width: ${dayRejectedPercent}%"></div>
-                            </div>
-                            <div class="stat-bar-legend">
-                                <span>${data.accepted} ${lang.statsAccepted}</span>
-                                <span>${data.custom} ${lang.statsCustom}</span>
-                                <span>${data.rejected} ${lang.statsRejected}</span>
-                            </div>
-                        </div>`;
-                    }).join('')}
-                </div>
+                <canvas id="chart7Days" height="200"></canvas>
             </div>
-            
-            <div class="time-stat">
+            <div class="chart-section">
                 <h4>${lang.statsLast30Days}</h4>
-                <div class="stat-bars">
-                    ${Object.entries(last30Days).map(([date, data]) => {
-                        const dayTotal = data.accepted + data.rejected + data.custom;
-                        const dayAcceptedPercent = dayTotal > 0 ? (data.accepted / dayTotal) * 100 : 0;
-                        const dayRejectedPercent = dayTotal > 0 ? (data.rejected / dayTotal) * 100 : 0;
-                        const dayCustomPercent = dayTotal > 0 ? (data.custom / dayTotal) * 100 : 0;
-                        
-                        return `
-                        <div class="stat-bar-container">
-                            <div class="stat-bar-label">${date}</div>
-                            <div class="stat-bar">
-                                <div class="stat-bar-segment accepted" style="width: ${dayAcceptedPercent}%"></div>
-                                <div class="stat-bar-segment custom" style="width: ${dayCustomPercent}%"></div>
-                                <div class="stat-bar-segment rejected" style="width: ${dayRejectedPercent}%"></div>
-                            </div>
-                            <div class="stat-bar-legend">
-                                <span>${data.accepted} ${lang.statsAccepted}</span>
-                                <span>${data.custom} ${lang.statsCustom}</span>
-                                <span>${data.rejected} ${lang.statsRejected}</span>
-                            </div>
-                        </div>`;
-                    }).join('')}
-                </div>
+                <canvas id="chart30Days" height="200"></canvas>
             </div>
         </div>
-    </div>`;
+        
+        <div class="history-section">
+            <h3>${lang.historyTitle}</h3>
+            <table class="history-table">
+                <thead>
+                    <tr>
+                        <th>Timestamp</th>
+                        <th>Status</th>
+                        <th>Categories</th>
+                        <th>Language</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${consentHistory.slice(-10).reverse().map(entry => `
+                        <tr>
+                            <td>${new Date(entry.timestamp).toLocaleString()}</td>
+                            <td>${entry.status}</td>
+                            <td>${Object.entries(entry.categories)
+                                .filter(([_, enabled]) => enabled)
+                                .map(([cat]) => cat).join(', ')}</td>
+                            <td>${entry.language}</td>
+                        </tr>
+                    `).join('')}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+    <script>
+        // Load Chart.js
+        const script = document.createElement('script');
+        script.src = 'https://cdn.jsdelivr.net/npm/chart.js';
+        document.head.appendChild(script);
+        
+        script.onload = () => {
+            // 7 Days Chart
+            new Chart(document.getElementById('chart7Days'), {
+                type: 'bar',
+                data: {
+                    labels: ${JSON.stringify(dates7.reverse())},
+                    datasets: [
+                        {
+                            label: '${lang.statsAccepted}',
+                            data: ${JSON.stringify(dates7.map(date => last7Days[date].accepted))},
+                            backgroundColor: '${colorScheme.primary}',
+                            borderRadius: 4
+                        },
+                        {
+                            label: '${lang.statsCustom}',
+                            data: ${JSON.stringify(dates7.map(date => last7Days[date].custom))},
+                            backgroundColor: '${colorScheme.secondary}',
+                            borderRadius: 4
+                        },
+                        {
+                            label: '${lang.statsRejected}',
+                            data: ${JSON.stringify(dates7.map(date => last7Days[date].rejected))},
+                            backgroundColor: '${colorScheme.danger}',
+                            borderRadius: 4
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    plugins: { legend: { position: 'top' } },
+                    scales: {
+                        x: { stacked: true },
+                        y: { stacked: true, beginAtZero: true }
+                    }
+                }
+            });
+            
+            // 30 Days Chart
+            new Chart(document.getElementById('chart30Days'), {
+                type: 'bar',
+                data: {
+                    labels: ${JSON.stringify(dates30.reverse())},
+                    datasets: [
+                        {
+                            label: '${lang.statsAccepted}',
+                            data: ${JSON.stringify(dates30.map(date => last30Days[date].accepted))},
+                            backgroundColor: '${colorScheme.primary}',
+                            borderRadius: 4
+                        },
+                        {
+                            label: '${lang.statsCustom}',
+                            data: ${JSON.stringify(dates30.map(date => last30Days[date].custom))},
+                            backgroundColor: '${colorScheme.secondary}',
+                            borderRadius: 4
+                        },
+                        {
+                            label: '${lang.statsRejected}',
+                            data: ${JSON.stringify(dates30.map(date => last30Days[date].rejected))},
+                            backgroundColor: '${colorScheme.danger}',
+                            borderRadius: 4
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    plugins: { legend: { position: 'top' } },
+                    scales: {
+                        x: { stacked: true },
+                        y: { stacked: true, beginAtZero: true }
+                    }
+                }
+            });
+        };
+        
+        // Analytics toggle
+        document.getElementById('analyticsToggle')?.addEventListener('change', function() {
+            config.analytics.enabled = this.checked;
+            saveAnalyticsData();
+        });
+        
+        // Admin button toggle
+        document.getElementById('adminButtonToggle')?.addEventListener('change', function() {
+            config.behavior.showDashboard = this.checked;
+            const adminButton = document.getElementById('cookieAdminButton');
+            adminButton.style.display = this.checked ? 'flex' : 'none';
+            if (this.checked) adminButton.classList.add('show');
+        });
+    </script>`;
 }
 
-// Generate password prompt HTML
+// Password prompt
 function generatePasswordPrompt(language = 'en') {
     const lang = translations[language] || translations.en;
-    
     return `
     <div class="password-prompt">
         <h3>${lang.passwordPrompt}</h3>
@@ -554,181 +535,362 @@ function generatePasswordPrompt(language = 'en') {
     </div>`;
 }
 
-// Check if current domain is allowed
+// Domain check
 function isDomainAllowed() {
     if (config.allowedDomains.length === 0) return true;
-    
     const currentDomain = window.location.hostname;
     return config.allowedDomains.some(domain => {
-        if (domain.startsWith('.')) {
-            // Match subdomains (e.g., .example.com matches sub.example.com)
-            return currentDomain === domain.substring(1) || currentDomain.endsWith(domain);
-        }
-        return currentDomain === domain;
+        return domain.startsWith('.') ? 
+            currentDomain === domain.substring(1) || currentDomain.endsWith(domain) : 
+            currentDomain === domain;
     });
 }
 
-// Check geo-targeting restrictions
-function checkGeoTargeting(geoData) {
-    // Check blocked locations first
-    if (config.geoConfig.blockedCountries.length > 0 && 
-        config.geoConfig.blockedCountries.includes(geoData.country)) {
-        return false;
+// Geo-targeting check
+async function checkGeoTargeting(geoData) {
+    if (!geoData.country) {
+        try {
+            const response = await fetch('https://ipapi.co/json/');
+            geoData = await response.json();
+        } catch (error) {
+            console.error('Geo-targeting fetch failed:', error);
+            return true; // Fallback to allow banner if geo fetch fails
+        }
     }
     
-    if (config.geoConfig.blockedRegions.length > 0 && 
-        config.geoConfig.blockedRegions.includes(geoData.region)) {
-        return false;
-    }
-    
-    if (config.geoConfig.blockedCities.length > 0 && 
+    if (config.geoConfig.blockedCountries.includes(geoData.country) ||
+        config.geoConfig.blockedRegions.includes(geoData.region) ||
         config.geoConfig.blockedCities.includes(geoData.city)) {
         return false;
     }
     
-    // Check allowed locations (if any restrictions are set)
-    if (config.geoConfig.allowedCountries.length > 0 && 
-        !config.geoConfig.allowedCountries.includes(geoData.country)) {
-        return false;
-    }
-    
-    if (config.geoConfig.allowedRegions.length > 0 && 
-        !config.geoConfig.allowedRegions.includes(geoData.region)) {
-        return false;
-    }
-    
-    if (config.geoConfig.allowedCities.length > 0 && 
-        !config.geoConfig.allowedCities.includes(geoData.city)) {
+    if ((config.geoConfig.allowedCountries.length > 0 && !config.geoConfig.allowedCountries.includes(geoData.country)) ||
+        (config.geoConfig.allowedRegions.length > 0 && !config.geoConfig.allowedRegions.includes(geoData.region)) ||
+        (config.geoConfig.allowedCities.length > 0 && !config.geoConfig.allowedCities.includes(geoData.city))) {
         return false;
     }
     
     return true;
 }
 
-// Detect user language based on country and browser settings
+// Language detection
 function detectUserLanguage(geoData) {
-    // First check if language is stored in cookie
     if (config.behavior.rememberLanguage) {
         const preferredLanguage = getCookie('preferred_language');
-        if (preferredLanguage && translations[preferredLanguage]) {
-            return preferredLanguage;
-        }
+        if (preferredLanguage && translations[preferredLanguage]) return preferredLanguage;
     }
     
-    // Then try to get language from country if auto-detection is enabled
-    if (config.languageConfig.autoDetectLanguage && geoData && geoData.country) {
+    if (config.languageConfig.autoDetectLanguage && geoData?.country) {
         const countryLang = countryLanguageMap[geoData.country];
-        if (countryLang && translations[countryLang]) {
-            return countryLang;
-        }
+        const lang = Array.isArray(countryLang) ? countryLang[0] : countryLang;
+        if (lang && translations[lang]) return lang;
     }
     
-    // Fallback to browser language
     const browserLang = (navigator.language || 'en').split('-')[0];
-    if (translations[browserLang]) {
-        return browserLang;
-    }
-    
-    // Final fallback to configured default language
-    return config.languageConfig.defaultLanguage || 'en';
+    return translations[browserLang] ? browserLang : config.languageConfig.defaultLanguage;
 }
 
-// Get available languages for dropdown
+// Available languages
 function getAvailableLanguages() {
-    // If specific languages are configured, use those
-    if (config.languageConfig.availableLanguages.length > 0) {
-        return config.languageConfig.availableLanguages.filter(lang => translations[lang]);
-    }
-    
-    // Otherwise return all available languages
-    return Object.keys(translations);
+    return config.languageConfig.availableLanguages.length > 0 ? 
+        config.languageConfig.availableLanguages.filter(lang => translations[lang]) : 
+        Object.keys(translations);
 }
 
-// Change language dynamically
+// Language change
 function changeLanguage(languageCode) {
     const lang = translations[languageCode] || translations.en;
     
-    // Update banner text
-    const banner = document.getElementById('cookieConsentBanner');
-    if (banner) {
-        banner.querySelector('h2').textContent = lang.title;
-        banner.querySelector('p').textContent = lang.description;
-        banner.querySelector('.privacy-policy-link').textContent = lang.privacy;
-        banner.querySelector('#acceptAllBtn').textContent = lang.accept;
-        banner.querySelector('#adjustConsentBtn').textContent = lang.customize;
-        banner.querySelector('#rejectAllBtn').textContent = lang.reject;
-    }
+    const updateElement = (selector, property, value) => {
+        const element = document.querySelector(selector);
+        if (element) element[property] = value;
+    };
     
-    // Update modal text
-    const modal = document.getElementById('cookieSettingsModal');
-    if (modal) {
-        modal.querySelector('h2').textContent = lang.title;
-        
-        // Update category headers and descriptions
-        const categories = {
-            'functional': 'essential',
-            'analytics': 'analytics',
-            'performance': 'performance',
-            'advertising': 'advertising',
-            'uncategorized': 'other'
-        };
-        
-        for (const [category, key] of Object.entries(categories)) {
-            const categoryElement = document.querySelector(`input[data-category="${category}"]`);
-            if (categoryElement) {
-                const container = categoryElement.closest('.cookie-category');
-                container.querySelector('h3').textContent = lang[key];
-                container.querySelector('p').textContent = lang[`${key}Desc`];
-            }
+    // Update banner
+    updateElement('#cookieConsentBanner h2', 'textContent', lang.title);
+    updateElement('#cookieConsentBanner p', 'textContent', lang.description);
+    updateElement('.privacy-policy-link', 'textContent', lang.privacy);
+    updateElement('#acceptAllBtn', 'textContent', lang.accept);
+    updateElement('#adjustConsentBtn', 'textContent', lang.customize);
+    updateElement('#rejectAllBtn', 'textContent', lang.reject);
+    
+    // Update modal
+    updateElement('#cookieSettingsModal h2', 'textContent', lang.title);
+    const categories = {
+        'functional': 'essential',
+        'analytics': 'analytics',
+        'performance': 'performance',
+        'advertising': 'advertising',
+        'uncategorized': 'other'
+    };
+    
+    for (const [category, key] of Object.entries(categories)) {
+        const container = document.querySelector(`input[data-category="${category}"]`)?.closest('.cookie-category');
+        if (container) {
+            updateElement(`input[data-category="${category}"] + .toggle-slider + h3`, 'textContent', lang[key]);
+            updateElement(`input[data-category="${category}"] + .toggle-slider + h3 + p`, 'textContent', lang[`${key}Desc`]);
         }
-        
-        // Update buttons
-        modal.querySelector('#rejectAllSettingsBtn').textContent = lang.reject;
-        modal.querySelector('#saveSettingsBtn').textContent = lang.save;
-        modal.querySelector('#acceptAllSettingsBtn').textContent = lang.accept;
     }
     
-    // Update floating button title
-    const floatingButton = document.getElementById('cookieFloatingButton');
-    if (floatingButton) {
-        floatingButton.title = lang.title;
-    }
+    updateElement('#rejectAllSettingsBtn', 'textContent', lang.reject);
+    updateElement('#saveSettingsBtn', 'textContent', lang.save);
+    updateElement('#acceptAllSettingsBtn', 'textContent', lang.accept);
     
-    // Update analytics dashboard if visible
+    // Update floating buttons
+    updateElement('#cookieFloatingButton', 'title', lang.title);
+    updateElement('#cookieAdminButton', 'title', lang.dashboardTitle);
+    
+    // Update dashboard
     const dashboard = document.querySelector('.analytics-dashboard');
     if (dashboard) {
         dashboard.innerHTML = generateAnalyticsDashboard(languageCode);
+        setupDashboardControls();
     }
     
-    // Update password prompt if visible
+    // Update password prompt
     const passwordPrompt = document.querySelector('.password-prompt');
     if (passwordPrompt) {
         passwordPrompt.innerHTML = generatePasswordPrompt(languageCode);
         setupPasswordPromptEvents();
     }
     
-    // Store selected language in cookie
     if (config.behavior.rememberLanguage) {
         setCookie('preferred_language', languageCode, 365);
     }
 }
 
-// Main initialization with enhanced cookie scanning
-document.addEventListener('DOMContentLoaded', function() {
-    // First check if we should run on this domain
+// Cookie management utilities
+function setCookie(name, value, days) {
+    let expires = '';
+    if (days !== -1) {
+        const date = new Date();
+        date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+        expires = `; expires=${date.toUTCString()}`;
+    }
+    document.cookie = `${name}=${value}${expires}; path=/; SameSite=Strict`;
+}
+
+function getCookie(name) {
+    const nameEQ = `${name}=`;
+    const cookies = document.cookie.split(';');
+    for (let cookie of cookies) {
+        cookie = cookie.trim();
+        if (cookie.startsWith(nameEQ)) {
+            return cookie.substring(nameEQ.length);
+        }
+    }
+    return null;
+}
+
+function deleteCookie(name) {
+    document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; SameSite=Strict`;
+}
+
+// Generate cookie table for display
+function generateCookieTable(cookies) {
+    return `
+    <table class="cookie-details-table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Duration</th>
+                <th>Description</th>
+            </tr>
+        </thead>
+        <tbody>
+            ${cookies.map(cookie => `
+                <tr>
+                    <td><code>${cookie.name}</code></td>
+                    <td>${cookie.duration}</td>
+                    <td>${cookie.description}</td>
+                </tr>
+            `).join('')}
+        </tbody>
+    </table>`;
+}
+
+// Consent management
+function acceptAllCookies() {
+    const consentData = {
+        status: 'accepted',
+        categories: {
+            functional: true,
+            analytics: true,
+            performance: true,
+            advertising: true,
+            uncategorized: true
+        },
+        timestamp: new Date().toISOString()
+    };
+    
+    setCookie('cookie_consent', JSON.stringify(consentData), 365);
+    updateConsentMode(consentData);
+    loadCookiesAccordingToConsent(consentData);
+    updateConsentStats('accepted', consentData);
+}
+
+function rejectAllCookies() {
+    const consentData = {
+        status: 'rejected',
+        categories: {
+            functional: true, // Essential cookies always enabled
+            analytics: false,
+            performance: false,
+            advertising: false,
+            uncategorized: false
+        },
+        timestamp: new Date().toISOString()
+    };
+    
+    setCookie('cookie_consent', JSON.stringify(consentData), 365);
+    updateConsentMode(consentData);
+    loadCookiesAccordingToConsent(consentData);
+    updateConsentStats('rejected', consentData);
+}
+
+function saveCustomSettings() {
+    const consentData = {
+        status: 'custom',
+        categories: {
+            functional: true, // Essential cookies always enabled
+            analytics: document.querySelector('input[data-category="analytics"]').checked,
+            performance: document.querySelector('input[data-category="performance"]').checked,
+            advertising: document.querySelector('input[data-category="advertising"]').checked,
+            uncategorized: document.querySelector('input[data-category="uncategorized"]')?.checked || false
+        },
+        timestamp: new Date().toISOString()
+    };
+    
+    setCookie('cookie_consent', JSON.stringify(consentData), 365);
+    updateConsentMode(consentData);
+    loadCookiesAccordingToConsent(consentData);
+    updateConsentStats('custom', consentData);
+}
+
+function updateConsentMode(consentData) {
+    const consentMap = {
+        functional: ['functionality_storage', 'security_storage'],
+        analytics: ['analytics_storage'],
+        performance: ['personalization_storage'],
+        advertising: ['ad_storage', 'ad_user_data', 'ad_personalization'],
+        uncategorized: []
+    };
+    
+    const consentUpdate = {};
+    Object.entries(consentMap).forEach(([category, storageTypes]) => {
+        storageTypes.forEach(type => {
+            consentUpdate[type] = consentData.categories[category] ? 'granted' : 'denied';
+        });
+    });
+    
+    // Ensure security_storage is always granted
+    consentUpdate['security_storage'] = 'granted';
+    
+    gtag('consent', 'update', consentUpdate);
+}
+
+function loadCookiesAccordingToConsent(consentData) {
+    const cookies = scanAndCategorizeCookies();
+    
+    Object.keys(cookies).forEach(category => {
+        if (category === 'functional' || consentData.categories[category]) {
+            // Cookies in this category are allowed, no action needed
+            return;
+        }
+        
+        // Delete cookies in non-consented categories
+        cookies[category].forEach(cookie => {
+            deleteCookie(cookie.name);
+        });
+    });
+}
+
+// UI control functions
+function showCookieBanner() {
+    const banner = document.getElementById('cookieConsentBanner');
+    if (banner) {
+        banner.style.display = 'block';
+        setTimeout(() => banner.classList.add('show'), 100);
+    }
+}
+
+function hideCookieBanner() {
+    const banner = document.getElementById('cookieConsentBanner');
+    if (banner) {
+        banner.classList.remove('show');
+        setTimeout(() => banner.style.display = 'none', 400);
+    }
+}
+
+function showSettingsModal() {
+    const modal = document.getElementById('cookieSettingsModal');
+    if (modal) {
+        modal.style.display = 'flex';
+        setTimeout(() => modal.classList.add('show'), 100);
+        hideCookieBanner();
+    }
+}
+
+function hideSettingsModal() {
+    const modal = document.getElementById('cookieSettingsModal');
+    if (modal) {
+        modal.classList.remove('show');
+        setTimeout(() => modal.style.display = 'none', 300);
+    }
+}
+
+function showFloatingButton() {
+    if (!config.behavior.floatingButton) return;
+    const button = document.getElementById('cookieFloatingButton');
+    if (button) {
+        button.style.display = 'flex';
+        setTimeout(() => button.classList.add('show'), 100);
+    }
+}
+
+function showAnalyticsDashboard() {
+    const modal = document.getElementById('cookieAnalyticsModal');
+    if (modal) {
+        modal.style.display = 'flex';
+        setTimeout(() => modal.classList.add('show'), 100);
+    }
+}
+
+function hideAnalyticsDashboard() {
+    const modal = document.getElementById('cookieAnalyticsModal');
+    if (modal) {
+        modal.classList.remove('show');
+        setTimeout(() => modal.style.display = 'none', 300);
+    }
+}
+
+// Update cookie tables
+function updateCookieTables(newCookies) {
+    const categories = ['functional', 'analytics', 'performance', 'advertising', 'uncategorized'];
+    categories.forEach(category => {
+        const container = document.querySelector(`input[data-category="${category}"]`)?.closest('.cookie-category');
+        if (container) {
+            const detailsContent = container.querySelector('.cookie-details-content');
+            if (detailsContent) {
+                detailsContent.innerHTML = newCookies[category].length > 0 ?
+                    generateCookieTable(newCookies[category]) :
+                    `<p class="no-cookies-message">No cookies in this category detected.</p>`;
+            }
+        }
+    });
+}
+
+// Main initialization
+document.addEventListener('DOMContentLoaded', async function() {
     if (!isDomainAllowed()) {
         console.log('Cookie consent banner disabled for this domain');
         return;
     }
     
-    // Load analytics data
-    if (config.analytics.enabled) {
-        loadAnalyticsData();
-    }
+    if (config.analytics.enabled) loadAnalyticsData();
     
-    // Get geo data from dataLayer or detect
     let geoData = {};
-    if (window.dataLayer && window.dataLayer.length > 0) {
+    if (window.dataLayer?.length > 0) {
         const geoItem = window.dataLayer.find(item => item.country || item.region || item.city);
         if (geoItem) {
             geoData = {
@@ -740,19 +902,16 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
     
-    // Check geo-targeting restrictions
-    if (!checkGeoTargeting(geoData)) {
+    if (!(await checkGeoTargeting(geoData))) {
         console.log('Cookie consent banner disabled for this location');
         return;
     }
     
-    // Detect language
     const detectedLanguage = detectUserLanguage(geoData);
-    
     const detectedCookies = scanAndCategorizeCookies();
+    
     if (detectedCookies.uncategorized.length > 0) {
         console.log('Uncategorized cookies found:', detectedCookies.uncategorized);
-        // Try to automatically categorize unknown cookies
         autoCategorizeCookies(detectedCookies.uncategorized).forEach(cookie => {
             const category = determineCookieCategory(cookie.name);
             if (category && category !== 'uncategorized') {
@@ -765,28 +924,37 @@ document.addEventListener('DOMContentLoaded', function() {
     injectConsentHTML(detectedCookies, detectedLanguage);
     initializeCookieConsent(detectedCookies, detectedLanguage);
     
-    if (getCookie('cookie_consent')) {
-        showFloatingButton();
-    }
+    if (getCookie('cookie_consent')) showFloatingButton();
     
-    // Track marketing parameters
     trackMarketingParameters();
     
-    // Enhanced periodic cookie scan with validation
     setInterval(() => {
         const newCookies = scanAndCategorizeCookies();
         if (JSON.stringify(newCookies) !== JSON.stringify(detectedCookies)) {
             updateCookieTables(newCookies);
         }
-    }, 30000); // Scan every 30 seconds
+    }, 30000);
     
-    // Handle scroll-based acceptance
     if (config.behavior.acceptOnScroll) {
         window.addEventListener('scroll', handleScrollAcceptance);
     }
+
+    // Handle accept on continue (click anywhere outside banner)
+    if (config.behavior.acceptOnContinue) {
+        document.addEventListener('click', function(event) {
+            const banner = document.getElementById('cookieConsentBanner');
+            if (banner && banner.classList.contains('show') && !banner.contains(event.target) && 
+                !event.target.closest('#cookieSettingsModal') && 
+                !event.target.closest('#cookieFloatingButton')) {
+                acceptAllCookies();
+                hideCookieBanner();
+                showFloatingButton();
+            }
+        });
+    }
 });
 
-// Handle scroll-based acceptance
+// Scroll-based acceptance
 function handleScrollAcceptance() {
     if (getCookie('cookie_consent')) {
         window.removeEventListener('scroll', handleScrollAcceptance);
@@ -794,7 +962,7 @@ function handleScrollAcceptance() {
     }
     
     const scrollPercentage = (window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100;
-    if (scrollPercentage > 50) { // Accept if scrolled more than 50%
+    if (scrollPercentage > 50) {
         acceptAllCookies();
         hideCookieBanner();
         showFloatingButton();
@@ -802,13 +970,13 @@ function handleScrollAcceptance() {
     }
 }
 
-// Function to automatically categorize unknown cookies
+// Cookie categorization
 function autoCategorizeCookies(uncategorizedCookies) {
     return uncategorizedCookies.map(cookie => {
         const category = determineCookieCategory(cookie.name);
         if (category) {
             cookieDatabase[cookie.name] = {
-                category: category,
+                category,
                 duration: cookie.duration,
                 description: cookie.description || 'Automatically categorized'
             };
@@ -817,34 +985,16 @@ function autoCategorizeCookies(uncategorizedCookies) {
     });
 }
 
-// Function to determine cookie category based on name patterns
 function determineCookieCategory(cookieName) {
     const lowerName = cookieName.toLowerCase();
-    
-    // Analytics patterns
-    if (/_ga|_gid|_gat|analytics|stats|measure|track|tk_ai/.test(lowerName)) {
-        return 'analytics';
-    }
-    
-    // Advertising patterns
-    if (/_gcl|_fbp|fr|ad|ads|tracking|marketing|doubleclick|gclid/.test(lowerName)) {
-        return 'advertising';
-    }
-    
-    // Functional patterns
-    if (/sess|token|auth|login|user|pref|settings|cart|checkout|hash|items/.test(lowerName)) {
-        return 'functional';
-    }
-    
-    // Performance patterns
-    if (/perf|speed|optimize|cdn|cache/.test(lowerName)) {
-        return 'performance';
-    }
-    
+    if (/_ga|_gid|_gat|analytics|stats|measure|track|tk_ai/.test(lowerName)) return 'analytics';
+    if (/_gcl|_fbp|fr|ad|ads|tracking|marketing|doubleclick|gclid/.test(lowerName)) return 'advertising';
+    if (/sess|token|auth|login|user|pref|settings|cart|checkout|hash|items/.test(lowerName)) return 'functional';
+    if (/perf|speed|optimize|cdn|cache/.test(lowerName)) return 'performance';
     return null;
 }
 
-// Enhanced cookie scanning function with better matching
+// Cookie scanning
 function scanAndCategorizeCookies() {
     const cookies = document.cookie.split(';');
     const result = {
@@ -861,12 +1011,11 @@ function scanAndCategorizeCookies() {
         
         let categorized = false;
         
-        // Check against known cookie patterns
         for (const pattern in cookieDatabase) {
             if (name.startsWith(pattern) || name === pattern) {
                 const cookieInfo = cookieDatabase[pattern];
                 result[cookieInfo.category].push({
-                    name: name,
+                    name,
                     value: value || '',
                     duration: cookieInfo.duration || getCookieDuration(name),
                     description: cookieInfo.description || 'Unknown purpose'
@@ -878,7 +1027,7 @@ function scanAndCategorizeCookies() {
         
         if (!categorized && name !== 'cookie_consent') {
             result.uncategorized.push({
-                name: name,
+                name,
                 value: value || '',
                 duration: getCookieDuration(name),
                 description: 'Unknown cookie purpose'
@@ -889,7 +1038,6 @@ function scanAndCategorizeCookies() {
     return result;
 }
 
-// Enhanced getCookieDuration function
 function getCookieDuration(name) {
     const cookieMatch = document.cookie.match(new RegExp(`${name}=[^;]+(;|$)`));
     if (!cookieMatch) return "Session";
@@ -898,8 +1046,7 @@ function getCookieDuration(name) {
     if (expiresMatch && expiresMatch[1]) {
         const expiryDate = new Date(expiresMatch[1]);
         return expiryDate > new Date() ? 
-            `Expires ${expiryDate.toLocaleDateString()}` : 
-            "Expired";
+            `Expires ${expiryDate.toLocaleDateString()}` : "Expired";
     }
     return "Session";
 }
@@ -908,18 +1055,12 @@ function trackMarketingParameters() {
     const params = new URLSearchParams(window.location.search);
     const marketingData = {};
     
-    // Check for common marketing parameters
-    if (params.has('gclid')) marketingData.gclid = params.get('gclid');
-    if (params.has('fbclid')) marketingData.fbclid = params.get('fbclid');
-    if (params.has('utm_source')) marketingData.utm_source = params.get('utm_source');
-    if (params.has('utm_medium')) marketingData.utm_medium = params.get('utm_medium');
-    if (params.has('utm_campaign')) marketingData.utm_campaign = params.get('utm_campaign');
+    ['gclid', 'fbclid', 'utm_source', 'utm_medium', 'utm_campaign'].forEach(param => {
+        if (params.has(param)) marketingData[param] = params.get(param);
+    });
     
     if (Object.keys(marketingData).length > 0) {
-        window.dataLayer.push({
-            'event': 'marketingParameters',
-            ...marketingData
-        });
+        window.dataLayer.push({ 'event': 'marketingParameters', ...marketingData });
     }
 }
 
@@ -928,7 +1069,6 @@ function injectConsentHTML(detectedCookies, language = 'en') {
     const availableLanguages = getAvailableLanguages();
     const currentTheme = config.uiTheme === 'classic' ? classicColorScheme : colorScheme;
     
-    // Generate cookie tables for each category
     const generateCategorySection = (category) => {
         const cookies = detectedCookies[category];
         const categoryKey = category === 'functional' ? 'essential' : category;
@@ -958,7 +1098,6 @@ function injectConsentHTML(detectedCookies, language = 'en') {
         </div>`;
     };
     
-    // Generate language selector dropdown if enabled
     const languageSelector = config.languageConfig.showLanguageSelector ? `
     <div class="language-selector">
         <select id="cookieLanguageSelect">
@@ -968,35 +1107,12 @@ function injectConsentHTML(detectedCookies, language = 'en') {
         </select>
     </div>` : '';
     
-    // Generate admin dashboard button if analytics enabled
-    const adminButton = config.analytics.enabled && config.analytics.showDashboard ? `
+    const adminButton = config.analytics.enabled && config.behavior.showDashboard ? `
     <div id="cookieAdminButton" class="cookie-admin-button" title="${lang.dashboardTitle}">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
             <path d="M288 160C252.7 160 224 188.7 224 224C224 259.3 252.7 288 288 288C323.3 288 352 259.3 352 224C352 188.7 323.3 160 288 160zM95.4 112.6C142.5 68.84 207.2 32 288 32C368.8 32 433.5 68.84 480.6 112.6C527.4 156 558.7 207.1 573.5 243.7C576.8 251.6 576.8 260.4 573.5 268.3C558.7 304 527.4 355.1 480.6 399.4C433.5 443.2 368.8 480 288 480C207.2 480 142.5 443.2 95.4 399.4C48.6 355.1 17.3 304 2.5 268.3C-.8 260.4-.8 251.6 2.5 243.7C17.3 207.1 48.6 156 95.4 112.6V112.6zM288 80C218.6 80 160 138.6 160 208C160 277.4 218.6 336 288 336C357.4 336 416 277.4 416 208C416 138.6 357.4 80 288 80zM44.96 256C56.53 286.1 83.51 329.2 124.4 368C165.3 406.8 219.1 432 288 432C356.9 432 410.7 406.8 451.6 368C492.5 329.2 519.5 286.1 531 256C519.5 225.9 492.5 182.8 451.6 144C410.7 105.2 356.9 80 288 80C219.1 80 165.3 105.2 124.4 144C83.51 182.8 56.53 225.9 44.96 256V256z"/>
         </svg>
     </div>` : '';
-    
-    // Determine banner position styles
-    let bannerPositionStyles = '';
-    switch(config.behavior.bannerPosition) {
-        case 'bottom-left':
-            bannerPositionStyles = 'bottom: 20px; left: 20px;';
-            break;
-        case 'bottom-right':
-            bannerPositionStyles = 'bottom: 20px; right: 20px;';
-            break;
-        case 'center':
-            bannerPositionStyles = `
-                top: 50%;
-                left: 50%;
-                transform: translate(-50%, -50%);
-                width: 90%;
-                max-width: 600px;
-            `;
-            break;
-        default:
-            bannerPositionStyles = 'bottom: 20px; left: 20px;';
-    }
     
     const html = `
     <!-- Main Consent Banner -->
@@ -1021,7 +1137,7 @@ function injectConsentHTML(detectedCookies, language = 'en') {
         <div class="cookie-settings-content">
             <div class="cookie-settings-header">
                 <h2>${lang.title}</h2>
-                <span class="close-modal">&times;</span>
+                <span class="close-modal">×</span>
             </div>
             <div class="cookie-settings-body">
                 ${generateCategorySection('functional')}
@@ -1052,7 +1168,7 @@ function injectConsentHTML(detectedCookies, language = 'en') {
         <div class="cookie-analytics-content">
             <div class="cookie-analytics-header">
                 <h2>${lang.dashboardTitle}</h2>
-                <span class="close-analytics-modal">&times;</span>
+                <span class="close-analytics-modal">×</span>
             </div>
             <div class="cookie-analytics-body">
                 ${config.analytics.passwordProtect && !isDashboardAuthenticated ? 
@@ -1063,14 +1179,14 @@ function injectConsentHTML(detectedCookies, language = 'en') {
     </div>
     
     <style>
-    /* Main Banner Styles - Updated to match image */
+    /* Main Banner Styles */
     .cookie-consent-banner {
         position: fixed;
-        ${bannerPositionStyles}
+        z-index: 9999;
+        width: 440px;
         background: ${currentTheme.background};
         border-radius: 12px;
         box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
-        z-index: 9999;
         padding: 24px;
         font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
         display: none;
@@ -1079,10 +1195,28 @@ function injectConsentHTML(detectedCookies, language = 'en') {
         transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
         border: none;
         overflow: hidden;
+        ${
+            config.behavior.bannerPosition === 'middle' ? `
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                bottom: auto;
+                width: 500px;
+            ` :
+            config.behavior.bannerPosition === 'left' ? `
+                left: 20px;
+                bottom: 20px;
+                right: auto;
+            ` : `
+                right: 20px;
+                bottom: 20px;
+                left: auto;
+            `
+        }
     }
 
     .cookie-consent-banner.show {
-        transform: translateY(0);
+        transform: ${config.behavior.bannerPosition === 'middle' ? 'translate(-50%, -50%)' : 'translateY(0)'};
         opacity: 1;
         display: block;
     }
@@ -1173,7 +1307,7 @@ function injectConsentHTML(detectedCookies, language = 'en') {
         box-shadow: 0 4px 16px rgba(46, 204, 113, 0.4);
     }
 
-    /* Language Selector Styles */
+    /* Language Selector */
     .language-selector {
         position: absolute;
         top: 15px;
@@ -1202,7 +1336,7 @@ function injectConsentHTML(detectedCookies, language = 'en') {
         box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
     }
 
-    /* Settings Modal - Updated to 845x470 dimensions */
+    /* Settings Modal */
     .cookie-settings-modal {
         display: none;
         position: fixed;
@@ -1301,7 +1435,7 @@ function injectConsentHTML(detectedCookies, language = 'en') {
         padding-bottom: 0;
     }
 
-    /* Toggle Switch Styles */
+    /* Toggle Switch */
     .toggle-container {
         display: flex;
         align-items: center;
@@ -1456,8 +1590,8 @@ function injectConsentHTML(detectedCookies, language = 'en') {
     /* Floating Settings Button */
     .cookie-settings-button {
         position: fixed;
-        ${config.behavior.floatingButtonPosition === 'left' ? 'left: 30px;' : 'right: 30px;'}
         bottom: 30px;
+        ${config.behavior.floatingButtonPosition === 'left' ? 'left: 30px;' : 'right: 30px;'}
         width: 60px;
         height: 60px;
         background-color: ${currentTheme.primary};
@@ -1500,8 +1634,8 @@ function injectConsentHTML(detectedCookies, language = 'en') {
     .cookie-admin-button {
         position: fixed;
         ${config.behavior.adminButtonPosition === 'left' ? 
-          'left: 30px;' : 'right: 30px;'}
-        bottom: 100px;
+          'left: 30px; bottom: 100px;' : 
+          'right: 30px; bottom: 100px;'}
         width: 60px;
         height: 60px;
         background-color: ${currentTheme.secondary};
@@ -1666,6 +1800,20 @@ function injectConsentHTML(detectedCookies, language = 'en') {
         font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
     }
 
+    .dashboard-controls {
+        margin-bottom: 20px;
+        display: flex;
+        gap: 20px;
+    }
+
+    .dashboard-controls label {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 14px;
+        color: ${currentTheme.textDark};
+    }
+
     .analytics-dashboard h3 {
         color: ${currentTheme.textDark};
         margin-top: 0;
@@ -1727,70 +1875,56 @@ function injectConsentHTML(detectedCookies, language = 'en') {
         color: ${currentTheme.textLight};
     }
 
-    .time-based-stats {
+    .charts-container {
         display: grid;
         grid-template-columns: 1fr;
         gap: 30px;
+        margin-bottom: 30px;
     }
 
-    .time-stat {
+    .chart-section {
         background-color: #f8f9fa;
         border-radius: 8px;
         padding: 20px;
     }
 
-    .time-stat h4 {
+    .chart-section h4 {
         margin: 0 0 15px 0;
         font-size: 1.1rem;
         color: ${currentTheme.textDark};
     }
 
-    .stat-bars {
-        display: grid;
-        grid-template-columns: 1fr;
-        gap: 10px;
+    .history-section {
+        margin-top: 30px;
     }
 
-    .stat-bar-container {
-        margin-bottom: 15px;
+    .history-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 13px;
     }
 
-    .stat-bar-label {
-        font-size: 0.85rem;
+    .history-table th {
+        text-align: left;
+        padding: 10px 12px;
+        background-color: #f0f0f0;
+        font-weight: 600;
+        border-bottom: 2px solid #e0e0e0;
+        color: ${currentTheme.textDark};
+    }
+
+    .history-table td {
+        padding: 10px 12px;
+        border-bottom: 1px solid #e0e0e0;
         color: ${currentTheme.textLight};
-        margin-bottom: 5px;
     }
 
-    .stat-bar {
-        height: 20px;
-        background-color: #ecf0f1;
-        border-radius: 10px;
-        overflow: hidden;
-        display: flex;
+    .history-table tr:last-child td {
+        border-bottom: none;
     }
 
-    .stat-bar-segment {
-        height: 100%;
-    }
-
-    .stat-bar-segment.accepted {
-        background-color: ${currentTheme.primary};
-    }
-
-    .stat-bar-segment.rejected {
-        background-color: ${currentTheme.danger};
-    }
-
-    .stat-bar-segment.custom {
-        background-color: ${currentTheme.secondary};
-    }
-
-    .stat-bar-legend {
-        display: flex;
-        justify-content: space-between;
-        font-size: 0.75rem;
-        color: ${currentTheme.textLight};
-        margin-top: 5px;
+    .history-table tr:hover {
+        background-color: #f5f5f5;
     }
 
     /* Footer Buttons */
@@ -1830,17 +1964,25 @@ function injectConsentHTML(detectedCookies, language = 'en') {
         .stats-summary {
             grid-template-columns: repeat(2, 1fr);
         }
+        
+        .cookie-consent-banner {
+            width: 90% !important;
+            ${config.behavior.bannerPosition === 'middle' ? `
+                left: 50%;
+                transform: translateX(-50%);
+                top: 50%;
+            ` : config.behavior.bannerPosition === 'left' ? `
+                left: 5%;
+                right: auto;
+            ` : `
+                right: 5%;
+                left: auto;
+            `}
+        }
     }
 
     @media (max-width: 768px) {
-        .cookie-consent-banner {
-            width: 90%;
-            ${config.behavior.bannerPosition === 'bottom-left' ? 'left: 5%;' : 
-             config.behavior.bannerPosition === 'bottom-right' ? 'right: 5%;' : 
-             'left: 5%; right: 5%;'}
-            ${config.behavior.bannerPosition === 'center' ? 'top: 50%; transform: translate(-50%, -50%);' : 'bottom: 10px;'}
-            padding: 20px;
-        }
+        .cookie-consent-buttons {
         
         .cookie-consent-buttons {
             flex-direction: column;
