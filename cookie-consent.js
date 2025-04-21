@@ -57,7 +57,7 @@ const config = {
     // Banner behavior
 behavior: {
     autoShow: true,
-    bannerDelay: 0,
+    bannerDelay: 10,
     floatingButton: true, // This can be removed if we're using the new properties
     showFloatingButton: true, // New: Control for normal cookie floating icon
     showAdminButton: true, // New: Control for admin dashboard floating icon
