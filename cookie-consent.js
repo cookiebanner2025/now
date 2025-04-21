@@ -60,7 +60,7 @@ const config = {
 behavior: {
     autoShow: true, // Automatically show banner on page load
     floatingButton: true, // Show floating settings button
-    floatingButtonPosition: 'left', // 'left' or 'right' for floating button
+    floatingButtonPosition: 'right', // 'left' or 'right' for floating button
     adminButtonPosition: 'left', // 'left' or 'right' for admin button
     bannerPosition: 'left', // 'left' or 'right' for banner
     rememberLanguage: true, // Remember user's language preference
