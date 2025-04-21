@@ -59,7 +59,7 @@ const config = {
 behavior: {
     autoShow: true, // Automatically show banner on page load
     bannerDelay: 10, // Seconds before showing banner (0, 5, 10, or any number)
-    floatingButton: true, // Show floating settings button
+    floatingButton: false, // Show floating settings button
     rememberLanguage: true, // Remember user's language preference
     acceptOnScroll: false, // Accept cookies when user scrolls
     acceptOnContinue: true, // Implicit consent when continuing to browse
