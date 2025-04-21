@@ -58,15 +58,16 @@ const config = {
 behavior: {
     autoShow: true,
     bannerDelay: 0,
-    floatingButton: true, // This can be removed if we're using the new properties
-    showFloatingButton: true, // New: Control for normal cookie floating icon
-    showAdminButton: true, // New: Control for admin dashboard floating icon
+    floatingButton: true,
+    showFloatingButton: true,
+    showAdminButton: true,
     rememberLanguage: true,
     acceptOnScroll: false,
     acceptOnContinue: true,
     floatingButtonPosition: 'right',
     adminButtonPosition: 'left',
-    bannerPosition: 'right'
+    bannerPosition: 'right',
+    bannerEnabled: true // New: Enable/disable cookie banner
 },
 
     // UI Theme (can be 'default' or 'classic')
