@@ -61,7 +61,7 @@ const config = {
         rememberLanguage: true, // Remember user's language preference
         acceptOnScroll: false, // Accept cookies when user scrolls
         acceptOnContinue: true, // Implicit consent when continuing to browse
-        floatingButtonPosition: 'left' // 'left' or 'right'
+        bannerPosition: 'left' // 'left' or 'right'
     },
 
 
