@@ -14,7 +14,7 @@ const config = {
     // Domain restriction - only show on these domains (empty array = all domains)
     allowedDomains: ['dev-rpractice.pantheonsite.io', 'yourdomain.com'],
     bannerPosition: 'right', // 'left' or 'right'
-    bannerDelay: 0, // Seconds before showing banner
+    bannerDelay: 5, // Seconds before showing banner
     // Language configuration
     languageConfig: {
         defaultLanguage: 'en', // Default language if auto-detection fails
