@@ -13,8 +13,8 @@
 const config = {
     // Domain restriction - only show on these domains (empty array = all domains)
     allowedDomains: ['dev-rpractice.pantheonsite.io', 'yourdomain.com'],
-     bannerPosition: 'right', // 'left' or 'right'
-    bannerDelay: 0, // seconds before showing banner
+    bannerPosition: 'right', // 'left' or 'right'
+    bannerDelay: 0, // Seconds before showing banner
     // Language configuration
     languageConfig: {
         defaultLanguage: 'en', // Default language if auto-detection fails
@@ -45,25 +45,15 @@ const config = {
     },
     
     // Analytics configuration
-    // Enhanced analytics controls
     analytics: {
         enabled: true,
-        storageDays: 30,
-        showDashboard: true,
-        passwordProtect: true,
-        dashboardPassword: 'admin123',
-        passwordCookieDuration: 365, // set to 0 for no expiration
-        floatingIconPosition: 'left' // position for analytics icon
+        storageDays: 30, // How long to keep analytics data
+        showDashboard: true, // Show analytics dashboard button
+        passwordProtect: true, // Enable password protection
+        dashboardPassword: 'admin123', // Default password (should be changed per site)
+        passwordCookieDuration: 365 // Days to remember password
     },
-     // New UI control options
-    uiControls: {
-        banner: true,
-        buttons: true,
-        floatingButton: true,
-        floatingButtonPosition: 'right',
-        colors: colorScheme, // reference to color scheme
-        // ... other UI controls ...
-    }
+    
     // Banner behavior
     behavior: {
         autoShow: true, // Automatically show banner on page load
@@ -151,31 +141,6 @@ const cookieDatabase = {
     'tk_ai': { category: 'analytics', duration: 'Session', description: 'Jetpack/Tumblr analytics' },
     'external_id': { category: 'functional', duration: 'Session', description: 'External service identifier' }
 };
-// New functions for analytics dashboard
-function generateAnalyticsDashboard() {
-    // ... detailed chart generation code ...
-}
-// Enhanced geo-targeting examples in config
-geoConfig: {
-    // Example: Only show in specific cities
-    allowedCities: ['New York', 'London', 'Paris'],
-    
-    // Example: Block specific regions
-    blockedRegions: ['California', 'Texas'],
-    
-    // ... other geo controls ...
-}
-
-// New delay implementation
-function showCookieBanner() {
-    if (config.bannerDelay > 0) {
-        setTimeout(() => {
-            // Actual show logic
-        }, config.bannerDelay * 1000);
-    } else {
-        // Immediate show
-    }
-}
 
 // Complete EU language translations (same as before, but I'll include it for completeness)
 const translations = {
