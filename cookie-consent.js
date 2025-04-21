@@ -55,14 +55,16 @@ const config = {
     },
     
     // Banner behavior
-    behavior: {
-        autoShow: true, // Automatically show banner on page load
-        floatingButton: true, // Show floating settings button
-        rememberLanguage: true, // Remember user's language preference
-        acceptOnScroll: false, // Accept cookies when user scrolls
-        acceptOnContinue: true, // Implicit consent when continuing to browse
-        bannerPosition: 'left' // 'left' or 'right'
-    },
+// Banner behavior
+behavior: {
+    autoShow: true, // Automatically show banner on page load
+    floatingButton: true, // Show floating settings button
+    rememberLanguage: true, // Remember user's language preference
+    acceptOnScroll: false, // Accept cookies when user scrolls
+    acceptOnContinue: true, // Implicit consent when continuing to browse
+    floatingButtonPosition: 'left', // Position for the floating settings button ('left' or 'right')
+    adminButtonPosition: 'right' // Position for the admin dashboard button ('left' or 'right')
+},
 
 
     // UI Theme (can be 'default' or 'classic')
@@ -1988,25 +1990,48 @@ function injectConsentHTML(detectedCookies, language = 'en') {
     }
 
     /* Floating Settings Button */
-    .cookie-settings-button {
-        position: fixed;
-        bottom: 30px;
-        ${config.behavior.floatingButtonPosition === 'left' ? 'left: 30px;' : 'right: 30px;'}
-        width: 60px;
-        height: 60px;
-        background-color: ${currentTheme.primary};
-        border-radius: 50%;
-        display: none;
-        align-items: center;
-        justify-content: center;
-        cursor: pointer;
-        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
-        z-index: 9998;
-        transition: all 0.3s ease;
-        opacity: 0;
-        transform: translateY(20px);
-        border: 2px solid white;
-    }
+/* Floating Settings Button */
+.cookie-settings-button {
+    position: fixed;
+    bottom: 30px;
+    ${config.behavior.floatingButtonPosition === 'left' ? 'left: 30px;' : 'right: 30px;'}
+    width: 60px;
+    height: 60px;
+    background-color: ${currentTheme.primary};
+    border-radius: 50%;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+    z-index: 9998;
+    transition: all 0.3s ease;
+    opacity: 0;
+    transform: translateY(20px);
+    border: 2px solid white;
+}
+
+/* Admin Button */
+.cookie-admin-button {
+    position: fixed;
+    ${config.behavior.adminButtonPosition === 'left' ? 
+      'left: 30px; bottom: 100px;' : 
+      'right: 30px; bottom: 100px;'}
+    width: 60px;
+    height: 60px;
+    background-color: ${currentTheme.secondary};
+    border-radius: 50%;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+    z-index: 9997;
+    transition: all 0.3s ease;
+    opacity: 0;
+    transform: translateY(20px);
+    border: 2px solid white;
+}
 
     .cookie-settings-button.show {
         opacity: 1;
