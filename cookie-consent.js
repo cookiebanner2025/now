@@ -60,12 +60,12 @@ const config = {
 behavior: {
     autoShow: true, // Automatically show banner on page load
     floatingButton: true, // Show floating settings button
-    floatingButtonPosition: 'right', // 'left' or 'right' for floating button
-    adminButtonPosition: 'left', // 'left' or 'right' for admin button
-    bannerPosition: 'right', // 'left' or 'right' for banner
     rememberLanguage: true, // Remember user's language preference
     acceptOnScroll: false, // Accept cookies when user scrolls
     acceptOnContinue: true, // Implicit consent when continuing to browse
+    floatingButtonPosition: 'right', // 'left' or 'right' for floating button
+    adminButtonPosition: 'left', // 'left' or 'right' for admin dashboard button
+    bannerPosition: 'right' // 'left' or 'right' for banner
 },
 
 
@@ -1600,7 +1600,7 @@ function injectConsentHTML(detectedCookies, language = 'en') {
     
     <style>
     /* Main Banner Styles - Updated to match image */
-  .cookie-consent-banner {
+.cookie-consent-banner {
     position: fixed;
     bottom: 20px;
     ${config.behavior.bannerPosition === 'left' ? 'left: 20px;' : 'right: 20px;'}
@@ -1991,7 +1991,6 @@ function injectConsentHTML(detectedCookies, language = 'en') {
         font-style: italic;
     }
 
-    /* Floating Settings Button */
 /* Floating Settings Button */
 .cookie-settings-button {
     position: fixed;
@@ -2012,7 +2011,7 @@ function injectConsentHTML(detectedCookies, language = 'en') {
     transform: translateY(20px);
     border: 2px solid white;
 }
-
+/* Admin Button */
 /* Admin Button */
 .cookie-admin-button {
     position: fixed;
@@ -2394,7 +2393,7 @@ function injectConsentHTML(detectedCookies, language = 'en') {
     }
 
     @media (max-width: 768px) {
-    .cookie-consent-banner {
+  .cookie-consent-banner {
         width: 90%;
         ${config.behavior.bannerPosition === 'left' ? 'left: 5%;' : 'right: 5%;'}
         bottom: 10px;
@@ -2442,7 +2441,7 @@ function injectConsentHTML(detectedCookies, language = 'en') {
     }
 
     @media (max-width: 480px) {
-      .cookie-consent-banner {
+   .cookie-consent-banner {
         padding: 15px;
         width: calc(100% - 30px);
         ${config.behavior.bannerPosition === 'left' ? 'left: 15px;' : 'right: 15px;'}
