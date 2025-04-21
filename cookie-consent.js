@@ -62,7 +62,7 @@ behavior: {
     floatingButton: true, // Show floating settings button
     floatingButtonPosition: 'right', // 'left' or 'right' for floating button
     adminButtonPosition: 'left', // 'left' or 'right' for admin button
-    bannerPosition: 'left', // 'left' or 'right' for banner
+    bannerPosition: 'right', // 'left' or 'right' for banner
     rememberLanguage: true, // Remember user's language preference
     acceptOnScroll: false, // Accept cookies when user scrolls
     acceptOnContinue: true, // Implicit consent when continuing to browse
