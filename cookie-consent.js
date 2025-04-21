@@ -55,19 +55,19 @@ const config = {
     },
     
     // Banner behavior
-// Banner behavior
 behavior: {
-    autoShow: true, // Automatically show banner on page load
-    bannerDelay: 0, // Seconds before showing banner (0, 5, 10, or any number)
-    floatingButton: true, // Show floating settings button
-    rememberLanguage: true, // Remember user's language preference
-    acceptOnScroll: false, // Accept cookies when user scrolls
-    acceptOnContinue: true, // Implicit consent when continuing to browse
-    floatingButtonPosition: 'right', // 'left' or 'right' for floating button
-    adminButtonPosition: 'left', // 'left' or 'right' for admin dashboard button
-    bannerPosition: 'right' // 'left' or 'right' for banner
+    autoShow: true,
+    bannerDelay: 0,
+    floatingButton: true, // This can be removed if we're using the new properties
+    showFloatingButton: true, // New: Control for normal cookie floating icon
+    showAdminButton: true, // New: Control for admin dashboard floating icon
+    rememberLanguage: true,
+    acceptOnScroll: false,
+    acceptOnContinue: true,
+    floatingButtonPosition: 'right',
+    adminButtonPosition: 'left',
+    bannerPosition: 'right'
 },
-
 
     // UI Theme (can be 'default' or 'classic')
     uiTheme: 'default'
@@ -2550,17 +2550,18 @@ function initializeCookieConsent(detectedCookies, language) {
         });
     }
     
-    // Setup admin button if enabled
-    if (config.analytics.enabled && config.analytics.showDashboard) {
-        const adminButton = document.getElementById('cookieAdminButton');
-        if (adminButton) {
-            adminButton.addEventListener('click', showAnalyticsDashboard);
-            setTimeout(() => {
-                adminButton.style.display = 'flex';
-                adminButton.classList.add('show');
-            }, 100);
-        }
+   
+ // Setup admin button if enabled
+if (config.analytics.enabled && config.analytics.showDashboard && config.behavior.showAdminButton) {
+    const adminButton = document.getElementById('cookieAdminButton');
+    if (adminButton) {
+        adminButton.addEventListener('click', showAnalyticsDashboard);
+        setTimeout(() => {
+            adminButton.style.display = 'flex';
+            adminButton.classList.add('show');
+        }, 100);
     }
+}
     
     // Setup password prompt events if needed
     if (config.analytics.passwordProtect && !isDashboardAuthenticated) {
@@ -2686,8 +2687,8 @@ function generateCookieTable(cookies) {
 }
 
 function showFloatingButton() {
-    if (!config.behavior.floatingButton) return;
-    
+    if (!config.behavior.showFloatingButton) return;
+
     const button = document.getElementById('cookieFloatingButton');
     button.style.display = 'flex';
     setTimeout(() => {
