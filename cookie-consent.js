@@ -56,9 +56,9 @@ const config = {
     
     // Banner behavior
 // Banner behavior
-// Banner behavior
 behavior: {
     autoShow: true, // Automatically show banner on page load
+    bannerDelay: 10, // Seconds before showing banner (0, 5, 10, or any number)
     floatingButton: true, // Show floating settings button
     rememberLanguage: true, // Remember user's language preference
     acceptOnScroll: false, // Accept cookies when user scrolls
@@ -2708,7 +2708,7 @@ function showCookieBanner() {
     banner.style.display = 'block';
     setTimeout(() => {
         banner.classList.add('show');
-    }, 10);
+    }, config.behavior.bannerDelay * 1000); // Convert seconds to milliseconds
 }
 
 function hideCookieBanner() {
