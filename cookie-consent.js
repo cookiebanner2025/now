@@ -62,7 +62,7 @@ const config = {
         acceptOnScroll: false, // Accept cookies when user scrolls
         acceptOnContinue: true, // Implicit consent when continuing to browse
         floatingButtonPosition: 'left', // 'left' or 'right'
-        bannerPosition: 'center', // 'bottom-left', 'bottom-right', 'center'
+        bannerPosition: 'bottom-left', // 'bottom-left', 'bottom-right', 'center'
         bannerDelay: 0, // Delay in seconds before showing banner (0 = no delay)
         adminButtonPosition: 'left', // 'left' or 'right'
         showAdminButton: true, // Show admin dashboard button
