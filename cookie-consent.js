@@ -56,14 +56,16 @@ const config = {
     
     // Banner behavior
 // Banner behavior
+// Banner behavior
 behavior: {
     autoShow: true, // Automatically show banner on page load
     floatingButton: true, // Show floating settings button
+    floatingButtonPosition: 'left', // 'left' or 'right' for floating button
+    adminButtonPosition: 'left', // 'left' or 'right' for admin button
+    bannerPosition: 'left', // 'left' or 'right' for banner
     rememberLanguage: true, // Remember user's language preference
     acceptOnScroll: false, // Accept cookies when user scrolls
     acceptOnContinue: true, // Implicit consent when continuing to browse
-    floatingButtonPosition: 'left', // Position for the floating settings button ('left' or 'right')
-    adminButtonPosition: 'right' // Position for the admin dashboard button ('left' or 'right')
 },
 
 
@@ -1598,24 +1600,24 @@ function injectConsentHTML(detectedCookies, language = 'en') {
     
     <style>
     /* Main Banner Styles - Updated to match image */
-    .cookie-consent-banner {
-        position: fixed;
-        bottom: 20px;
-        ${config.behavior.floatingButtonPosition === 'left' ? 'left: 20px;' : 'right: 20px;'}
-        width: 440px;
-        background: ${currentTheme.background};
-        border-radius: 12px;
-        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
-        z-index: 9999;
-        padding: 24px;
-        font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-        display: none;
-        transform: translateY(20px);
-        opacity: 0;
-        transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
-        border: none;
-        overflow: hidden;
-    }
+  .cookie-consent-banner {
+    position: fixed;
+    bottom: 20px;
+    ${config.behavior.bannerPosition === 'left' ? 'left: 20px;' : 'right: 20px;'}
+    width: 440px;
+    background: ${currentTheme.background};
+    border-radius: 12px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+    z-index: 9999;
+    padding: 24px;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    display: none;
+    transform: translateY(20px);
+    opacity: 0;
+    transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+    border: none;
+    overflow: hidden;
+}
 
     .cookie-consent-banner.show {
         transform: translateY(0);
@@ -2392,12 +2394,12 @@ function injectConsentHTML(detectedCookies, language = 'en') {
     }
 
     @media (max-width: 768px) {
-        .cookie-consent-banner {
-            width: 90%;
-            ${config.behavior.floatingButtonPosition === 'left' ? 'left: 5%;' : 'right: 5%;'}
-            bottom: 10px;
-            padding: 20px;
-        }
+    .cookie-consent-banner {
+        width: 90%;
+        ${config.behavior.bannerPosition === 'left' ? 'left: 5%;' : 'right: 5%;'}
+        bottom: 10px;
+        padding: 20px;
+    }
         
         .cookie-consent-buttons {
             flex-direction: column;
@@ -2440,11 +2442,11 @@ function injectConsentHTML(detectedCookies, language = 'en') {
     }
 
     @media (max-width: 480px) {
-        .cookie-consent-banner {
-            padding: 15px;
-            width: calc(100% - 30px);
-            ${config.behavior.floatingButtonPosition === 'left' ? 'left: 15px;' : 'right: 15px;'}
-        }
+      .cookie-consent-banner {
+        padding: 15px;
+        width: calc(100% - 30px);
+        ${config.behavior.bannerPosition === 'left' ? 'left: 15px;' : 'right: 15px;'}
+    }
         
         .cookie-consent-content h2 {
             font-size: 1.1rem;
