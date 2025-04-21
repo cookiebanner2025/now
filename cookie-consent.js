@@ -60,7 +60,7 @@ behavior: {
     bannerDelay: 0,
     floatingButton: true, // This can be removed if we're using the new properties
     showFloatingButton: true, // New: Control for normal cookie floating icon
-    showAdminButton: false, // New: Control for admin dashboard floating icon
+    showAdminButton: true, // New: Control for admin dashboard floating icon
     rememberLanguage: true,
     acceptOnScroll: false,
     acceptOnContinue: true,
