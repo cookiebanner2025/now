@@ -1994,7 +1994,39 @@ function injectConsentHTML(detectedCookies, language = 'en') {
             bottom: 10px;
             padding: 20px;
         }
+         /* Responsive adjustments */
+    @media (max-width: 768px) {
+        .cookie-consent-banner {
+            ${config.behavior.bannerPosition === 'center' ? 
+             'top: auto; bottom: 20px; transform: translate(-50%, 0);' : ''}
+            width: calc(100% - 40px);
+            padding: 15px;
+        }
         
+        .cookie-consent-buttons {
+            flex-direction: column;
+        }
+        
+        .cookie-btn {
+            width: 100%;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .cookie-consent-content h2 {
+            font-size: 16px;
+        }
+        
+        .cookie-consent-content p {
+            font-size: 13px;
+        }
+        
+        .cookie-btn {
+            padding: 10px;
+            font-size: 13px;
+            min-width: 0;
+        }
+    }
         .cookie-consent-banner.show {
             ${config.bannerPosition === 'center' ? 'transform: translateX(-50%);' : ''}
         }
