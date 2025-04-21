@@ -14,14 +14,7 @@ const config = {
     // Domain restriction - only show on these domains (empty array = all domains)
     allowedDomains: ['dev-rpractice.pantheonsite.io', 'yourdomain.com'],
     bannerPosition: 'right', // 'left' or 'right'
-    
-     // darkMode configuration
-    darkMode: {
-        enabled: true, // Enable dark mode toggle
-        default: 'auto', // 'auto', 'light', or 'dark'
-        savePreference: true // Save user preference in a cookie
-        
-    },
+   
     // Language configuration
     languageConfig: {
         defaultLanguage: 'en', // Default language if auto-detection fails
@@ -65,16 +58,15 @@ const config = {
 behavior: {
     autoShow: true,
     bannerDelay: 0,
-    floatingButton: true,
-    showFloatingButton: true,
-    showAdminButton: true,
+    floatingButton: true, // This can be removed if we're using the new properties
+    showFloatingButton: true, // New: Control for normal cookie floating icon
+    showAdminButton: true, // New: Control for admin dashboard floating icon
     rememberLanguage: true,
     acceptOnScroll: false,
     acceptOnContinue: true,
     floatingButtonPosition: 'right',
     adminButtonPosition: 'left',
-    bannerPosition: 'right',
-    bannerEnabled: true // New: Enable/disable cookie banner
+    bannerPosition: 'right'
 },
 
     // UI Theme (can be 'default' or 'classic')
@@ -98,8 +90,6 @@ gtag('consent', 'default', {
 });
 
 // Color scheme - easily customizable
-
-
 const colorScheme = {
     primary: '#2ecc71',      // Green (accept button color)
     secondary: '#3498db',    // Blue (save button color)
@@ -122,106 +112,7 @@ const classicColorScheme = {
     toggleActive: '#4CAF50', // Same as primary
     toggleInactive: '#9E9E9E'// Gray for inactive
 };
-// Dark mode color scheme
-const darkColorScheme = {
-    primary: '#27ae60',      // Darker green
-    secondary: '#2980b9',    // Darker blue
-    danger: '#c0392b',       // Darker red
-    textDark: '#ecf0f1',     // Light text
-    textLight: '#bdc3c7',    // Lighter text
-    background: '#2c3e50',   // Dark background
-    toggleActive: '#27ae60', // Same as primary
-    toggleInactive: '#7f8c8d'// Gray for inactive
-};
 
-// Classic dark theme color scheme
-const classicDarkColorScheme = {
-    primary: '#388E3C',      // Darker green
-    secondary: '#1976D2',    // Darker blue
-    danger: '#D32F2F',       // Darker red
-    textDark: '#FFFFFF',     // White text
-    textLight: '#BDBDBD',    // Light gray text
-    background: '#212121',   // Dark background
-    toggleActive: '#388E3C', // Same as primary
-    toggleInactive: '#616161'// Gray for inactive
-};
-
-// Check if user prefers dark mode
-function prefersDarkMode() {
-    return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-}
-
-// Get current color scheme based on theme and mode
-function getCurrentColorScheme() {
-    const isDarkMode = getDarkModePreference();
-    if (config.uiTheme === 'classic') {
-        return isDarkMode ? classicDarkColorScheme : classicColorScheme;
-    }
-    return isDarkMode ? darkColorScheme : colorScheme;
-}
-
-// Get dark mode preference
-function getDarkModePreference() {
-    if (config.darkMode.savePreference) {
-        const savedPreference = getCookie('dark_mode_preference');
-        if (savedPreference) return savedPreference === 'dark';
-    }
-    
-    if (config.darkMode.default === 'auto') {
-        return prefersDarkMode();
-    }
-    return config.darkMode.default === 'dark';
-}
-
-// Toggle dark mode
-function toggleDarkMode() {
-    const currentMode = getDarkModePreference();
-    const newMode = !currentMode;
-    
-    if (config.darkMode.savePreference) {
-        setCookie('dark_mode_preference', newMode ? 'dark' : 'light', 365);
-    }
-    
-    applyColorScheme(getCurrentColorScheme());
-    updateDarkModeToggle(newMode);
-}
-
-// Apply color scheme to the banner
-function applyColorScheme(scheme) {
-    const banner = document.getElementById('cookieConsentBanner');
-    if (banner) {
-        banner.style.setProperty('--primary-color', scheme.primary);
-        banner.style.setProperty('--secondary-color', scheme.secondary);
-        banner.style.setProperty('--danger-color', scheme.danger);
-        banner.style.setProperty('--text-dark', scheme.textDark);
-        banner.style.setProperty('--text-light', scheme.textLight);
-        banner.style.setProperty('--background', scheme.background);
-        banner.style.setProperty('--toggle-active', scheme.toggleActive);
-        banner.style.setProperty('--toggle-inactive', scheme.toggleInactive);
-    }
-    
-    // Also apply to modals if they exist
-    const modal = document.getElementById('cookieSettingsModal');
-    if (modal) {
-        modal.style.setProperty('--primary-color', scheme.primary);
-        modal.style.setProperty('--secondary-color', scheme.secondary);
-        modal.style.setProperty('--danger-color', scheme.danger);
-        modal.style.setProperty('--text-dark', scheme.textDark);
-        modal.style.setProperty('--text-light', scheme.textLight);
-        modal.style.setProperty('--background', scheme.background);
-        modal.style.setProperty('--toggle-active', scheme.toggleActive);
-        modal.style.setProperty('--toggle-inactive', scheme.toggleInactive);
-    }
-}
-
-// Update dark mode toggle button state
-function updateDarkModeToggle(isDarkMode) {
-    const toggle = document.getElementById('darkModeToggle');
-    if (toggle) {
-        toggle.checked = isDarkMode;
-        toggle.querySelector('.dark-mode-icon').textContent = isDarkMode ? '🌙' : '☀️';
-    }
-}
 // Enhanced cookie database with detailed descriptions
 const cookieDatabase = {
     // Google Analytics/GA4
@@ -1642,19 +1533,6 @@ function injectConsentHTML(detectedCookies, language = 'en') {
             <path d="M288 160C252.7 160 224 188.7 224 224C224 259.3 252.7 288 288 288C323.3 288 352 259.3 352 224C352 188.7 323.3 160 288 160zM95.4 112.6C142.5 68.84 207.2 32 288 32C368.8 32 433.5 68.84 480.6 112.6C527.4 156 558.7 207.1 573.5 243.7C576.8 251.6 576.8 260.4 573.5 268.3C558.7 304 527.4 355.1 480.6 399.4C433.5 443.2 368.8 480 288 480C207.2 480 142.5 443.2 95.4 399.4C48.6 355.1 17.3 304 2.5 268.3C-.8 260.4-.8 251.6 2.5 243.7C17.3 207.1 48.6 156 95.4 112.6V112.6zM288 80C218.6 80 160 138.6 160 208C160 277.4 218.6 336 288 336C357.4 336 416 277.4 416 208C416 138.6 357.4 80 288 80zM44.96 256C56.53 286.1 83.51 329.2 124.4 368C165.3 406.8 219.1 432 288 432C356.9 432 410.7 406.8 451.6 368C492.5 329.2 519.5 286.1 531 256C519.5 225.9 492.5 182.8 451.6 144C410.7 105.2 356.9 80 288 80C219.1 80 165.3 105.2 124.4 144C83.51 182.8 56.53 225.9 44.96 256V256z"/>
         </svg>
     </div>` : '';
-
-
-const darkModeToggle = config.darkMode.enabled ? `
-<div class="dark-mode-toggle">
-    <label class="toggle-switch">
-        <input type="checkbox" id="darkModeToggle" ${getDarkModePreference() ? 'checked' : ''}>
-        <span class="toggle-slider"></span>
-        <span class="dark-mode-icon">${getDarkModePreference() ? '🌙' : '☀️'}</span>
-    </label>
-</div>` : '';
-
-
-
     
     const html = `
     <!-- Main Consent Banner -->
@@ -1721,37 +1599,6 @@ const darkModeToggle = config.darkMode.enabled ? `
     </div>
     
     <style>
-
-:root {
-    --primary-color: ${currentTheme.primary};
-    --secondary-color: ${currentTheme.secondary};
-    --danger-color: ${currentTheme.danger};
-    --text-dark: ${currentTheme.textDark};
-    --text-light: ${currentTheme.textLight};
-    --background: ${currentTheme.background};
-    --toggle-active: ${currentTheme.toggleActive};
-    --toggle-inactive: ${currentTheme.toggleInactive};
-}
-
-/* Dark Mode Toggle Styles */
-.dark-mode-toggle {
-    position: absolute;
-    top: 15px;
-    ${config.languageConfig.showLanguageSelector ? 'right: 80px;' : 'right: 15px;'}
-}
-
-.dark-mode-toggle .toggle-switch {
-    width: 70px;
-}
-
-.dark-mode-icon {
-    position: absolute;
-    right: 8px;
-    top: 50%;
-    transform: translateY(-50%);
-    pointer-events: none;
-    font-size: 14px;
-
     /* Main Banner Styles - Updated to match image */
 .cookie-consent-banner {
     position: fixed;
@@ -2675,39 +2522,7 @@ function initializeCookieConsent(detectedCookies, language) {
         updateConsentMode(consentData);
         loadCookiesAccordingToConsent(consentData);
         showFloatingButton();
-
-
-   // Initialize dark mode
-    if (config.darkMode.enabled) {
-        applyColorScheme(getCurrentColorScheme());
-        
-        const darkModeToggle = document.getElementById('darkModeToggle');
-        if (darkModeToggle) {
-            darkModeToggle.addEventListener('change', toggleDarkMode);
-        }
-        
-        // Watch for system preference changes if in auto mode
-        if (config.darkMode.default === 'auto') {
-            window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
-                if (config.darkMode.savePreference && getCookie('dark_mode_preference')) {
-                    return; // Don't change if user has set a preference
-                }
-                toggleDarkMode();
-            });
-        }
     }
-
-
-
-        
-    }
-
-
-
-
-
-
-
     
     // Set up event listeners
     setupEventListeners();
@@ -3171,3 +2986,4 @@ function getCookie(name) {
     }
     return null;
 }
+
